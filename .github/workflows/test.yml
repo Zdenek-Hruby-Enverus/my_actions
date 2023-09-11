@@ -6,6 +6,7 @@ jobs:
     outputs:
         python_test: ${{ steps.check_path.outputs.my_path }}
         custom_output: ${{ steps.output_action.outputs.custom_action_output }}
+        random-number: ${{ steps.output_action.outputs.random-number }}
 
     runs-on: ubuntu-latest
 
@@ -32,6 +33,9 @@ jobs:
       - name: Custom action with output
         id: output_action
         uses: ./.github/actions/output_action
+
+      - run: echo ${{ steps.output_action.outputs.random-number }}
+        shell: bash
 
       - name: Final Echo
         run: echo "That's it"
@@ -62,11 +66,12 @@ jobs:
 
       - name: Check previous job path
         run:
-            echo ${{ needs.check-bats-version.outputs.python_test}}
+            echo ${{ needs.check-bats-version.outputs.python_test }}
 
       - name: Check custom output
         run:
             echo ${{ needs.check-bats-version.outputs.custom_output }}
+        shell: bash
 
       - name: Run an easy python script
         run:

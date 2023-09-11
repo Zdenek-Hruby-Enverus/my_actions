@@ -6,6 +6,10 @@ outputs:
     description: "just trying custom action's output"
     value: ${{ steps.output_test.outputs.custom_action_output}}
 
+  random-number:
+    description: "Random number"
+    value: ${{ steps.random-number-generator.outputs.random-number }}
+
 runs:
   using: "composite"
   steps:
@@ -15,3 +19,7 @@ runs:
       run:
         CUSTOM_OP="CUSTOM ACTION RULEZ"
         echo "custom_action_output=$(echo $CUSTOM_OP)" >> $GITHUB_OUTPUT
+    
+    - id: random-number-generator
+      run: echo "random-number=$(echo $RANDOM)" >> $GITHUB_OUTPUT
+      shell: bash
