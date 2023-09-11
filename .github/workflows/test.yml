@@ -15,3 +15,23 @@ jobs:
       - run: bats -v
       - name: Final Echo
         run: echo "That's it"
+
+  python-stuff:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echoing
+        run:
+            echo "Starting with python stuff"
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+            python-version: 3.9
+      - name: Print the python path
+        run: 
+            echo "$PATH" >> $GITHUB_OUTPUT
+      - name: Run an easy python script
+        run:
+            python ./my_script.py
+      - name:
+        run:
+            echo "Finish with python stuff"
