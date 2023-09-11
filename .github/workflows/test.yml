@@ -39,10 +39,14 @@ jobs:
         run:
             echo $(poetry --version)
 
+      - name: Check Path
+        run:
+            echo "my_path=$PATH" >> $GITHUB_OUTPUT
+
       - name: Run an easy python script
         run:
             python my_script.py
-            
+
       - name:
         run:
             echo "Finish with python stuff"
