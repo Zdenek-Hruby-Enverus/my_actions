@@ -1,0 +1,10 @@
+name: Output Action
+description: simulates output for a custom action
+
+runs:
+  using: "composite"
+  steps:
+    - name: Output Test
+      shell: bash
+      run:
+        echo "custom_action_output=Do you see the Output Action output?" >> $GITHUB_OUTPUT

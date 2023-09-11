@@ -5,6 +5,7 @@ jobs:
   check-bats-version:
     outputs:
         python_test: ${{steps.check_path.outputs.my_path}}
+        custom_output: ${{steps.output_action.outputs.custom_action_output }}
 
     runs-on: ubuntu-latest
 
@@ -27,6 +28,10 @@ jobs:
         uses: ./.github/actions/first_action
         with:
             custom_param: "bazinga"
+
+      - name: Custom action with output
+        id: output_action
+        uses: ./.github/actions/output_action
 
       - name: Final Echo
         run: echo "That's it"
@@ -58,6 +63,10 @@ jobs:
       - name: Check previous job path
         run:
             echo ${{ needs.check-bats-version.outputs.python_test}}
+
+      - name: Check custom output
+        run:
+            echo ${{ needs.check-bats-version.outputs.custom_output }}
 
       - name: Run an easy python script
         run:
