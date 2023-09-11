@@ -34,7 +34,7 @@ jobs:
             echo $(poetry --version)
       - name: Run an easy python script
         run:
-            python ./my_script.py
+            python my_script.py
       - name:
         run:
             echo "Finish with python stuff"
