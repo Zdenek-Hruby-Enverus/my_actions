@@ -77,7 +77,7 @@ jobs:
 
       - name: Run an easy python script
         run:
-            python my_script.py
+            python my_script.py --mu 100 --sigma 16
 
       - name:
         run:
