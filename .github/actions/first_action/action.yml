@@ -10,5 +10,6 @@ runs:
         echo "This is first custom action"
     
     - name: And Action
+      shell: bash
       run:
         echo "And that's it from my custom action"
