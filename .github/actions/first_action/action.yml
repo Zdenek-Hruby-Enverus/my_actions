@@ -16,9 +16,11 @@ runs:
     
     - name: Parameter action
       shell: bash
+      env:
+        custom_param: ${{ inputs.custom_param }}
       run:
-        echo "showing input parameter ${{ inputs.custom_param }}"
-        
+        echo "showing input parameter $custom_param"
+
     - name: And Action
       shell: bash
       run:
