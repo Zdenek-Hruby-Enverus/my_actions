@@ -1,0 +1,8 @@
+jobs:
+  my_first_job:
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+      
+    - name: step1
+      run:
+        echo "Running the first custom job"

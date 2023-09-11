@@ -23,7 +23,9 @@ jobs:
         run:
             echo "my_path=$PATH" >> $GITHUB_OUTPUT
 
-    
+      - name: Custom job as a step
+        uses: ./.github/actions/first_action
+        
       - name: Final Echo
         run: echo "That's it"
 
@@ -54,7 +56,7 @@ jobs:
       - name: Check previous job path
         run:
             echo ${{ needs.check-bats-version.outputs.python_test}}
-            
+
       - name: Run an easy python script
         run:
             python my_script.py
