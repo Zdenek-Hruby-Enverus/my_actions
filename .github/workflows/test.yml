@@ -31,7 +31,7 @@ jobs:
 
       - name: Custom action with output
         id: output_action
-        uses: ./.github/actions/output_action >> $GITHUB_OUTPUT
+        uses: ./.github/actions/output_action
 
       - name: Final Echo
         run: echo "That's it"

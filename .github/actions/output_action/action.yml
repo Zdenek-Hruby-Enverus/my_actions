@@ -1,11 +1,17 @@
 name: Output Action
 description: simulates output for a custom action
 
+outputs:
+  custom_action_output:
+    description: "just trying custom action's output"
+    value: ${{ steps.output_test.outputs.custom_action_output}}
+
 runs:
   using: "composite"
   steps:
     - name: Output Test
+      id: output_test
       shell: bash
       run:
         CUSTOM_OP="CUSTOM ACTION RULEZ"
-        echo "custom_action_output=$CUSTOM_OP"
+        echo "custom_action_output=$CUSTOM_OP" >> $GITHUB_OUTPUT
