@@ -25,6 +25,8 @@ jobs:
 
       - name: Custom job as a step
         uses: ./.github/actions/first_action
+        with:
+            custom_param: "bazinga"
 
       - name: Final Echo
         run: echo "That's it"

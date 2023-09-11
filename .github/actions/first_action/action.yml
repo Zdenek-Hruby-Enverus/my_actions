@@ -1,6 +1,11 @@
 name: First Custom Action
 description: Just giving a try
 
+inputs:
+  custom_param:
+    description: trying inputs for custom actions
+    required: true
+
 runs:
   using: "composite"
   steps:
@@ -9,6 +14,11 @@ runs:
       run: |
         echo "This is first custom action"
     
+    - name: Parameter action
+      shell: bash
+      run:
+        echo "showing input parameter ${{ inputs.custom_param }}"
+        
     - name: And Action
       shell: bash
       run:
