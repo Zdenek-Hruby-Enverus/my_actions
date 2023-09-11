@@ -4,8 +4,8 @@ on: [push]
 jobs:
   check-bats-version:
     outputs:
-        python_test: ${{steps.check_path.outputs.my_path}}
-        custom_output: ${{steps.output_action.outputs.custom_action_output }}
+        python_test: ${{ steps.check_path.outputs.my_path }}
+        custom_output: ${{ steps.output_action.outputs.custom_action_output }}
 
     runs-on: ubuntu-latest
 

@@ -7,4 +7,5 @@ runs:
     - name: Output Test
       shell: bash
       run:
-        echo "custom_action_output=Do you see the Output Action output?" >> $GITHUB_OUTPUT
+        CUSTOM_OP="CUSTOM ACTION RULEZ"
+        echo "custom_action_output=$CUSTOM_OP" >> $GITHUB_OUTPUT
