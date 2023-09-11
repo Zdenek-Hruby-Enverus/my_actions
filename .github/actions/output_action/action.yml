@@ -8,4 +8,4 @@ runs:
       shell: bash
       run:
         CUSTOM_OP="CUSTOM ACTION RULEZ"
-        echo "custom_action_output=$CUSTOM_OP" >> $GITHUB_OUTPUT
+        echo "custom_action_output=$CUSTOM_OP"
