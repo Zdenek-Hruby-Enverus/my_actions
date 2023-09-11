@@ -26,9 +26,12 @@ jobs:
         uses: actions/setup-python@v2
         with:
             python-version: 3.9
-      - name: Print the python path
+      - name: Install poetry
         run: 
-            echo "$PATH" >> $GITHUB_OUTPUT
+            pip install poetry
+      - name: Poetry version
+        run:
+            echo $(poetry --version)
       - name: Run an easy python script
         run:
             python ./my_script.py
