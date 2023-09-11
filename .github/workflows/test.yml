@@ -24,7 +24,7 @@ jobs:
             echo "my_path=$PATH" >> $GITHUB_OUTPUT
 
       - name: Custom job as a step
-        uses: .github/actions/first_action
+        uses: ./.github/actions/first_action
 
       - name: Final Echo
         run: echo "That's it"
