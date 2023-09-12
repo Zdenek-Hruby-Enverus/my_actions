@@ -21,6 +21,11 @@ runs:
       run:
         echo "showing input parameter $custom_param"
 
+    - name: Check Env Vars
+      shell: bash
+      run:
+        echo "Env Var input from workflow $MYENVVAR"
+
     - name: And Action
       shell: bash
       run:
