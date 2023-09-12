@@ -1,6 +1,13 @@
 name: learn-github-actions
+
 run-name: ${{ github.actor }} is learning GitHub Actions
+
 on: [push]
+
+env:
+  MYENVVAR: env_var_${{ github.run_id}}
+  ANOTHERVAR: var_${{ github.run_id }}
+
 jobs:
   check-bats-version:
     outputs:
@@ -25,6 +32,11 @@ jobs:
         id: check_path
         run:
             echo "my_path=$PATH" >> $GITHUB_OUTPUT
+
+      - name: Check Env Vars
+        run: |
+          echo "Env Var $MYENVVAR"
+          echo "Another env var $ANOTHERVAR"
 
       - name: Custom job as a step
         uses: ./.github/actions/first_action

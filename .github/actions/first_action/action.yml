@@ -25,3 +25,7 @@ runs:
       shell: bash
       run:
         echo "And that's it from my custom action"
+
+branding:
+  icon: 'check'
+  color: 'blue'
