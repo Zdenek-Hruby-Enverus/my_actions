@@ -28,7 +28,7 @@ runs:
       id: another_random
       shell: bash
       run:
-        echo "another_random=$(echo $RANDOM)" >> $GTIHUB_OUTPUT
+        echo "another_random=$(echo $RANDOM)" >> $GITHUB_OUTPUT
 
     - name: Showing another random number
       shell: bash
