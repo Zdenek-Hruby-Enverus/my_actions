@@ -23,3 +23,14 @@ runs:
     - id: random-number-generator
       run: echo "random-number=$(echo $RANDOM)" >> $GITHUB_OUTPUT
       shell: bash
+
+    - name: Another random number
+      id: another_random
+      shell: bash
+      run:
+        echo "another_random=$(echo $RANDOM)" >> $GTIHUB_OUTPUT
+
+    - name: Showing another random number
+      shell: bash
+      run:
+        echo ${{ steps.another_random.outputs.another_random }}
