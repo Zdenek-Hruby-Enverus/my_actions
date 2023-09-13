@@ -47,8 +47,8 @@ jobs:
         uses: ./.github/actions/first_action
         with:
             custom_param: "bazinga"
-            mu: matrix.mu
-            sigma: matrix.sigma
+            mu: ${{ matrix.mu }}
+            sigma: ${{ matrix.sigma }}
 
       - name: Custom action with output
         id: output_action
