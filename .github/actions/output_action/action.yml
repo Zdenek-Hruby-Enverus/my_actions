@@ -13,6 +13,11 @@ outputs:
 runs:
   using: "composite"
   steps:
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: "3.9"
+    
     - name: Output Test
       id: output_test
       shell: bash
