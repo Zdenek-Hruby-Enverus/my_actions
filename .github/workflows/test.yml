@@ -98,3 +98,21 @@ jobs:
       - name:
         run:
             echo "Finish with python stuff"
+
+  envjob1:
+    runs-on: ubuntu-latest
+    needs: [python-stuff]
+    env:
+      JOBENV: One-env-var
+    steps:
+      - name: ONE
+        run: echo $JOBENV
+
+  envjob2:
+    runs-on: ubuntu-latest
+    needs: [python-stuff]
+    env:
+      JOBENV: Two-job-env
+    steps:
+      - name: Two
+        run: echo $JOBENV
