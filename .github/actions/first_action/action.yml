@@ -26,6 +26,12 @@ runs:
       run:
         echo "Env Var input from workflow $MYENVVAR"
 
+    - name: Strategy check
+      shell: bash
+      run:
+        echo "Matrix MU ${{ matrix.mu }}"
+        echo "Matrix sigma ${{ matrix.sigma }}"
+
     - name: And Action
       shell: bash
       run:

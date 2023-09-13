@@ -115,4 +115,4 @@ jobs:
       JOBENV: Two-job-env
     steps:
       - name: Two
-        run: echo $JOBENV
+        run: echo ${{ env.JOBENV }}
