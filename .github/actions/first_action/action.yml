@@ -49,7 +49,7 @@ runs:
     - name: Check steps var 2
       shell: bash
       run:
-        echo ${{ steps.step_var.params_multiplication }}
+        echo ${{ steps.step_var.outputs.params_multiplication }}
 
     - name: And Action
       shell: bash
