@@ -6,6 +6,10 @@ inputs:
     description: trying inputs for custom actions
     required: true
 
+  job_strategy:
+    description: input strategy from the job
+    required: true
+
 runs:
   using: "composite"
   steps:
@@ -29,8 +33,8 @@ runs:
     - name: Strategy check
       shell: bash
       run:
-        echo "Matrix MU ${{ matrix.mu }}"
-        echo "Matrix sigma ${{ matrix.sigma }}"
+        echo "Matrix MU ${{ input.job_strategy.mu }}"
+        echo "Matrix sigma ${{ input.job_strategy.sigma }}"
 
     - name: And Action
       shell: bash

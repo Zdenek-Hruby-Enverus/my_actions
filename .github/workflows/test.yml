@@ -18,6 +18,11 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        mu: [0, 100]
+        sigma: [1, 16]
+
     steps:
       - name: Checkout  
         uses: actions/checkout@v3
@@ -42,6 +47,7 @@ jobs:
         uses: ./.github/actions/first_action
         with:
             custom_param: "bazinga"
+            job_strategy: matrix
 
       - name: Custom action with output
         id: output_action
