@@ -44,7 +44,7 @@ runs:
       id: step_var
       shell: bash
       run:
-        echo "params_multiplication='$inputs.mu * $inputs.sigma'" >> $GITHUB_OUTPUT
+        echo "params_multiplication='${{ inputs.mu }} * ${{ inputs.sigma }}'" >> $GITHUB_OUTPUT
 
     - name: Check steps var 2
       shell: bash
