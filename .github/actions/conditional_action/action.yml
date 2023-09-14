@@ -1,0 +1,21 @@
+name: Conditional Action
+description: test conditions
+
+runs:
+  using: "composite"
+  steps:
+    - name: Init
+      shell: bash
+      run: echo "Initializing ..."
+
+    - name: First Cond
+      shell: bash
+      if: ${{ github.job =  'envjob1' }}
+      run:
+        echo "This is job1"
+
+    - name: Second Cond
+      shell: bash
+      if: ${{ github.job =  'envjob2' }}
+      run:
+        echo "This is job 2"
