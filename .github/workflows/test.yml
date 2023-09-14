@@ -115,6 +115,10 @@ jobs:
       - name: ONE
         run: echo $JOBENV
 
+      - name: Check job
+        run:
+          echo ${{ github.job }}
+
   envjob2:
     runs-on: ubuntu-latest
     needs: [python-stuff]
@@ -123,3 +127,7 @@ jobs:
     steps:
       - name: Two
         run: echo ${{ env.JOBENV }}
+
+      - name: Check job
+        run:
+          echo ${{ github.job }}
