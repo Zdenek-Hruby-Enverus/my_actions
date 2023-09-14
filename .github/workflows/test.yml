@@ -26,6 +26,7 @@ jobs:
     steps:
       - name: Checkout  
         uses: actions/checkout@v3
+
       - name: Node Setup
         uses: actions/setup-node@v3
         with:
@@ -114,6 +115,10 @@ jobs:
     steps:
       - name: Checkout  
         uses: actions/checkout@v3
+
+      - name: ASD
+        run:
+          ls -l ./.github/actions
 
       - name: ONE
         run: echo $JOBENV
