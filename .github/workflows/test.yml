@@ -120,7 +120,7 @@ jobs:
           echo ${{ github.job }}
 
       - name: Cond Run
-        uses: ./.github/actions/conditional_action
+        uses: ./.github/actions/cond_action
 
   envjob2:
     runs-on: ubuntu-latest
@@ -136,4 +136,4 @@ jobs:
           echo ${{ github.job }}
 
       - name: Cond Run
-        uses: ./.github/actions/conditional_action
+        uses: ./.github/actions/cond_action
