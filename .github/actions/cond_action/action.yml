@@ -10,12 +10,12 @@ runs:
 
     - name: First Cond
       shell: bash
-      # if: ${{ github.job =  'envjob1' }}
+      if: ${{ github.job =  'envjob1' }}
       run:
         echo "This is job1"
 
     - name: Second Cond
       shell: bash
-      # if: ${{ github.job =  'envjob2' }}
+      if: ${{ github.job =  'envjob2' }}
       run:
         echo "This is job 2"
