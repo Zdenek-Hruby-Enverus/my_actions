@@ -112,6 +112,9 @@ jobs:
     env:
       JOBENV: One-env-var
     steps:
+      - name: Checkout  
+        uses: actions/checkout@v3
+
       - name: ONE
         run: echo $JOBENV
 
@@ -128,7 +131,10 @@ jobs:
     env:
       JOBENV: Two-job-env
     steps:
-      - name: Two
+      - name: Checkout  
+        uses: actions/checkout@v3
+      
+      - name: Two      
         run: echo ${{ env.JOBENV }}
 
       - name: Check job
