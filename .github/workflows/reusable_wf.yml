@@ -14,8 +14,8 @@ on:
         type: string
 
 env:
-  PROD="prodprod"
-  DEV="devdev"
+  PROD: "prodprod"
+  DEV: "devdev"
 
 jobs:
   setup-github-envs:
