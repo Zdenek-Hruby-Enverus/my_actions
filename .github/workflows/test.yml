@@ -103,7 +103,7 @@ jobs:
         run: |
           echo "HOST is ${{ env.MYHOST }}"
           echo "TOKEN is ${{ env.MYTOKEN }}"
-          echo "job-env=$env.MYHOST" >> $GITHUB_OUTPUT
+          echo "job-env=${{ env.MYHOST }}" >> $GITHUB_OUTPUT
 
   check-matrix-output:
     runs-on: ubuntu-latest
