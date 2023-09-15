@@ -22,16 +22,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
         - name: Setup Envs
-          run:
+          run: |
             if [ ${{ inputs.dbx-env == 'prod' }} ]
-                then 
-                    echo "COSI=${{ env.PROD }}" >> $GITHUB_ENV
-                else
-                    echo "COSI=${{ env.DEV }}" >> $GITHUB_ENV
+            then 
+              echo "COSI=${{ env.PROD }}" >> $GITHUB_ENV
+            else
+              echo "COSI=${{ env.DEV }}" >> $GITHUB_ENV
             fi
+          shell: bash
 
   check-matrix-first:
     runs-on: ubuntu-latest
+
+    needs: [ setup-github-envs ]
 
     outputs:
         job_environment: ${{ steps.check-env-vars.outputs.job-env }}
