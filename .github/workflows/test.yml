@@ -62,57 +62,6 @@ jobs:
       - name: Final Echo
         run: echo "That's it"
 
-  prod-job:
-    runs-on: ubuntu-latest
-    needs: [check-bats-version]
-    steps:
-      - run:
-          echo "This is a prod job"
-  
-  dev-job:
-    runs-on: ubuntu-latest
-    needs: [check-bats-version]
-    steps:
-      - run:
-          echo "This is a dev job"
-
-  matrix-check:
-    runs-on: ubuntu-latest
-
-    outputs:
-      job_environment: ${{ steps.check-env-vars.outputs.job-env }}
-    
-    strategy:
-      matrix:
-        include:
-          - host: "DBX-PROD"
-            token: "Prod-Token"
-            dbx_env: "prod"
-          - host: "DBX-DEV"
-            token: "Dev-Token"
-            dbx_env: "dev"
-
-    needs: [dev-job, prod-job]
-
-    env:
-      MYHOST: ${{ matrix.host }}
-      MYTOKEN: ${{ matrix.token }}
-    steps:
-      - name: Check Env Vars
-        id: check-env-vars
-        run: |
-          echo "HOST is ${{ env.MYHOST }}"
-          echo "TOKEN is ${{ env.MYTOKEN }}"
-          echo "job-env=${{ env.MYHOST }}" >> $GITHUB_OUTPUT
-
-  check-matrix-output:
-    runs-on: ubuntu-latest
-    needs: matrix-check
-    steps:
-      - name: Value of env check
-        run:
-          echo ${{ needs.matrix-check.outputs.job_environment }}
-
   python-stuff:
     runs-on: ubuntu-latest
     needs: [check-bats-version]
@@ -199,3 +148,19 @@ jobs:
 
       - name: Cond Run
         uses: ./.github/actions/cond_action
+
+  using-reusable:
+    needs: [envjob1, envjob2]
+    
+    strategy:
+      matrix:
+        includes:
+          - host: HOST-PROD
+            token: Prod-token
+          - host: HOST-DEV
+            token: Dev-token
+  
+    uses: ./.github/workflows/reusable_wf.yml
+    with:
+      host: ${{ matrix.includes.host }}
+      token: ${{ matrix.includes.token }}
