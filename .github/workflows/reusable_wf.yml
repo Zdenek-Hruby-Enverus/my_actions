@@ -31,6 +31,10 @@ jobs:
             fi
           shell: bash
 
+        - name: Print Github Envs
+          run: |
+            echo ${{ env.COSI }}
+
   check-matrix-first:
     runs-on: ubuntu-latest
 
