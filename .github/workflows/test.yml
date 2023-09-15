@@ -154,9 +154,7 @@ jobs:
     
     strategy:
       matrix:
-        include:
-          - dbx-env: prod
-          - dbx-env: dev
+        dbx-env: [ prod, dev ] 
   
     uses: ./.github/workflows/reusable_wf.yml
     with:
