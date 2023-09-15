@@ -16,6 +16,7 @@ on:
 env:
   PROD: "prodprod"
   DEV: "devdev"
+  COSI: ""
 
 jobs:
   setup-github-envs:
@@ -25,11 +26,9 @@ jobs:
           run: |
             if [ ${{ inputs.dbx-env == 'prod' }} ]
             then 
-              echo "COSI=${{ env.PROD }}" >> $GITHUB_ENV
-            #   echo "COSI2=${{ env.PROD}}_prod" >> $GITHUB_ENV
-            else [ ${{ inputs.dbx-env == 'dev' }} ]
-            #   echo "COSI=${{ env.DEV }}" >> $GITHUB_ENV
-              echo "COSI2=${{ env.DEV}}_dev" >> $GITHUB_ENV
+             ${{ env.COSI}} = ${{ env.PROD }}"
+            else
+             ${{ env.COSI}} = ${{ env.DEV }}"
             fi
           shell: bash
 
