@@ -26,7 +26,7 @@ jobs:
             if [ ${{ inputs.dbx-env == 'prod' }} ]
             then 
               echo "COSI=${{ env.PROD }}" >> $GITHUB_ENV
-            else
+            elif [ ${{ inputs.dbx-env == 'dev' }} ]
               echo "COSI=${{ env.DEV }}" >> $GITHUB_ENV
             fi
           shell: bash
