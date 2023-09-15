@@ -16,6 +16,10 @@ on:
         required: true
         type: string
 
+env:
+  COSI: "AKJDSALKDNLA"
+  COSI_DALSIHO: "UAIOUAIUDS"
+
 jobs:
   check-matrix-first:
     runs-on: ubuntu-latest
@@ -29,7 +33,7 @@ jobs:
     #       - host: "DBX-PROD"
     #         token: "Prod-Token"
     #         dbx_env: "prod"
-    #       - host: "DBX-DEV"
+    #       - host: "DBX-DEV"ds-model
     #         token: "Dev-Token"
     #         dbx_env: "dev"
     env:
@@ -43,3 +47,8 @@ jobs:
           echo "HOST is ${{ env.MYHOST }}"
           echo "TOKEN is ${{ env.MYTOKEN }}"
           echo "job-env=${{ env.MYHOST }}" >> $GITHUB_OUTPUT
+
+      - name: easy echo
+        run: |
+          echo ${{ env.COSI }}
+          echo ${{ env.COSI_DALSIHO }}
