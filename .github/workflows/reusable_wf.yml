@@ -13,6 +13,10 @@ on:
         required: true
         type: string
 
+env:
+  PROD="prodprod"
+  DEV="devdev"
+
 jobs:
   setup-github-envs:
     runs-on: ubuntu-latest
@@ -20,8 +24,10 @@ jobs:
         - name: Setup Envs
           run: |
             if [ ${{ inputs.dbx-env == 'prod' }} ]
-                then echo "COSI=prodprod" >> $GITHUB_ENV
-                else echo "COSI=devdev" >> $GITHUB_ENV
+                then 
+                    echo "COSI=${{ env.PROD }}" >> $GITHUB_ENV
+                else
+                    echo "COSI=${{ env.DEV }}" >> $GITHUB_ENV
             fi
 
   check-matrix-first:
