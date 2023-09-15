@@ -160,5 +160,4 @@ jobs:
   
     uses: ./.github/workflows/reusable_wf.yml
     with:
-      host: ${{ matrix.host }}
-      token: ${{ matrix.token }}
+      dbx-env: ${{ matrix.dbx-env }}
