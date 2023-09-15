@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
         - name: Setup Envs
-          run: |
+          run:
             if [ ${{ inputs.dbx-env == 'prod' }} ]
                 then 
                     echo "COSI=${{ env.PROD }}" >> $GITHUB_ENV
