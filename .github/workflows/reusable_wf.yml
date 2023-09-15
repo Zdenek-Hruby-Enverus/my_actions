@@ -9,18 +9,21 @@ on:
         value: ${{ jobs.check-matrix-first.outputs.job_environment }}
     
     inputs:
-      host:
+      dbx-env:
         required: true
         type: string
-      token:
-        required: true
-        type: string
-
-env:
-  COSI: "AKJDSALKDNLA"
-  COSI_DALSIHO: "UAIOUAIUDS"
 
 jobs:
+  setup-github-envs:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Setup Envs
+          run: |
+            if [ ${{ inputs.dbx-env == 'prod' }} ]
+                then echo "COSI=prodprod" >> $GITHUB_ENV
+                else echo "COSI=devdev" >> $GITHUB_ENV
+            fi
+
   check-matrix-first:
     runs-on: ubuntu-latest
 
@@ -51,4 +54,3 @@ jobs:
       - name: easy echo
         run: |
           echo ${{ env.COSI }}
-          echo ${{ env.COSI_DALSIHO }}

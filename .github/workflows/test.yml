@@ -155,10 +155,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - host: HOST-PROD
-            token: Prod-token
-          - host: HOST-DEV
-            token: Dev-token
+          - dbx-env: prod
+          - dbx-env: dev
   
     uses: ./.github/workflows/reusable_wf.yml
     with:
