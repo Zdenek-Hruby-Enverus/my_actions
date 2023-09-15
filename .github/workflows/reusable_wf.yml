@@ -1,0 +1,45 @@
+name: Reusable Workflow
+
+on:
+  workflow_call:
+    # Map the workflow outputs to job outputs
+    outputs:
+      job_environment:
+        description: "The first output string"
+        value: ${{ jobs.check-matrix-first.outputs.job_environment }}
+    
+    inputs:
+      host:
+        required: true
+        type: string
+      token:
+        required: true
+        type: string
+
+jobs:
+  check-matrix-first:
+    runs-on: ubuntu-latest
+
+    outputs:
+        job_environment: ${{ steps.check-env-vars.outputs.job-env }}
+      
+    strategy:
+      matrix:
+        include:
+          - host: "DBX-PROD"
+            token: "Prod-Token"
+            dbx_env: "prod"
+          - host: "DBX-DEV"
+            token: "Dev-Token"
+            dbx_env: "dev"
+    env:
+      MYHOST: ${{ inputs.host }}
+      MYTOKEN: ${{ inputs.token }}
+     
+    steps:
+      - name: Check Env Vars
+        id: check-env-vars
+        run: |
+          echo "HOST is ${{ env.MYHOST }}"
+          echo "TOKEN is ${{ env.MYTOKEN }}"
+          echo "job-env=${{ env.MYHOST }}" >> $GITHUB_OUTPUT
