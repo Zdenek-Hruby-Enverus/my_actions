@@ -23,15 +23,15 @@ jobs:
     outputs:
         job_environment: ${{ steps.check-env-vars.outputs.job-env }}
       
-    strategy:
-      matrix:
-        include:
-          - host: "DBX-PROD"
-            token: "Prod-Token"
-            dbx_env: "prod"
-          - host: "DBX-DEV"
-            token: "Dev-Token"
-            dbx_env: "dev"
+    # strategy:
+    #   matrix:
+    #     include:
+    #       - host: "DBX-PROD"
+    #         token: "Prod-Token"
+    #         dbx_env: "prod"
+    #       - host: "DBX-DEV"
+    #         token: "Dev-Token"
+    #         dbx_env: "dev"
     env:
       MYHOST: ${{ inputs.host }}
       MYTOKEN: ${{ inputs.token }}

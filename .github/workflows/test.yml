@@ -154,7 +154,7 @@ jobs:
     
     strategy:
       matrix:
-        includes:
+        include:
           - host: HOST-PROD
             token: Prod-token
           - host: HOST-DEV
@@ -162,5 +162,5 @@ jobs:
   
     uses: ./.github/workflows/reusable_wf.yml
     with:
-      host: ${{ matrix.includes.host }}
-      token: ${{ matrix.includes.token }}
+      host: ${{ matrix.host }}
+      token: ${{ matrix.token }}
