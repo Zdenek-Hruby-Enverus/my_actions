@@ -1,0 +1,14 @@
+name: Lower action
+description: test action running in action
+
+runs:
+  using: "composite"
+  steps:
+    - name: Init
+      shell: bash
+      run: echo "Initializing ..."
+
+    - name: Lower Echoing
+      shell: bash
+      run:
+        echo "Running lower ..."

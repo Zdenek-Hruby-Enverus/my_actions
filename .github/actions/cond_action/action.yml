@@ -8,6 +8,9 @@ runs:
       shell: bash
       run: echo "Initializing ..."
 
+    - name: Lowering
+      uses: ./.github/actions/lower_action
+
     - name: First Cond
       shell: bash
       if: ${{ github.job == 'envjob1' }}
