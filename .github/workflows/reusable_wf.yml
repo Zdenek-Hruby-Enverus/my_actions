@@ -26,13 +26,16 @@ jobs:
           if: ${{ inputs.dbx-env == 'prod' }}
           run: |
             echo "COSI=${{ env.PROD }}" >> $GITHUB_ENV
+            echo "RUN_ENV=environment_prod" >> $GITHUB_ENV
           shell: bash
 
         - name: Setup Envs Dev
           if: ${{ inputs.dbx-env == 'dev' }}
           run: |
             echo "COSI=${{ env.DEV }}" >> $GITHUB_ENV
+            echo "RUN_ENV='environment_dev'"
           shell: bash
+
         - name: Sleep
           run:
             sleep 60
@@ -40,6 +43,7 @@ jobs:
         - name: Print Github Envs
           run: |
             echo ${{ env.COSI }}
+            echo ${{ env.RUN_ENV }}
 
   check-matrix-first:
     runs-on: ubuntu-latest
