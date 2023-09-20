@@ -39,4 +39,4 @@ jobs:
 
           - name: Run Python Script
             run: |
-                python ./scripts/greetings.py --name ${{ inputs.name }} --place ${{ inputs.place }}
+                python ./scripts/greetings.py --name '${{ inputs.name }}' --place '${{ inputs.place }}'
