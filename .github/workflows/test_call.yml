@@ -1,0 +1,41 @@
+name: calling a workflow
+
+run-name: ${{ github.actor }} is calling
+
+on:
+    workflow_call:
+        inputs:
+            name:
+                default: "John Doe"
+                required: true
+                type: string
+
+            place:
+                default: "Asd"
+                required: true
+                type: string
+
+jobs:
+    init_j:
+        runs-on: ubutnu-latest
+
+        steps:
+          - name: Just Init
+            run: |
+                echo "Initilialization ..."
+
+    work_with_input:
+        runs-on: ubutnu-latest
+
+        steps:
+          - name: Checkout Repo
+            uses: actions/checkout@v3
+
+          - name: Setup Python
+            uses: actions/setup-python@v4
+            with:
+                python-version: 3.10
+
+          - name: Run Python Script
+            run: |
+                python ./scripts/greetings.py --name ${{ inputs.name }} --place ${{ inputs.place }}
