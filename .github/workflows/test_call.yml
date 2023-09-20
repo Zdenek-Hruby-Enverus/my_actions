@@ -3,7 +3,7 @@ name: calling a workflow
 run-name: ${{ github.actor }} is calling
 
 on:
-    workflow_call:
+    workflow_dispatch:
         inputs:
             name:
                 default: "John Doe"
