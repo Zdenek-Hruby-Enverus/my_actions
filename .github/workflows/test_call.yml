@@ -17,6 +17,7 @@ on:
                   - "New York"
                   - "Old York"
                   - "ZOO York"
+                  - "All"
 
 jobs:
     init_j:
@@ -37,7 +38,7 @@ jobs:
         - name: Prepared Input
           id: prepare_input
           run: |
-            if [[ ${{ inputs.place }} ]]
+            if [[ ${{ inputs.place }} != "All" ]]
             then 
               echo "prepared_matrix={\"include\":[{\"place\": ${{ inputs.place }} }]}" >> $GITHUB_OUTPUT
             else
