@@ -38,7 +38,7 @@ jobs:
         - name: Prepared Input
           id: prepare_input
           run: |
-            if [[ "${{ inputs.place }}"" != "All" ]]
+            if [[ "${{ inputs.place }}" != "All" ]]
             then 
               echo "prepared_matrix={\"include\":[{\"place\": ${{ inputs.place }} }]}" >> $GITHUB_OUTPUT
             else
