@@ -11,9 +11,12 @@ on:
                 type: string
 
             place:
-                default: "Asd"
-                required: true
-                type: string
+                required: false
+                type: choice
+                options:
+                  - "New York"
+                  - "Old York"
+                  - "ZOO York"
 
 jobs:
     init_j:
@@ -24,9 +27,30 @@ jobs:
             run: |
                 echo "Initilialization ..."
 
+    prepare_input:
+      runs-on: ubuntu-latest
+
+      outputs:
+        matrix_input: ${{ steps.prepare_input.outputs.prepared_matrix }}
+
+      steps:
+        - name: Prepared Input
+          id: prepare_input
+          run: |
+            if [[ ${{ inputs.place }} ]]
+            then 
+              echo "prepared_matrix={\"include\":[{\"place\": ${{ inputs.place }} }]}" >> $GITHUB_OUTPUT
+            else
+              echo "prepared_matrix={\"include\":[{\"place\": \"New York\"},{\"place\": \"Old York\"},{\"place\": \"ZOO York\"}]}" >> $GITHUB_OUTPUT
+            fi
+
+
     work_with_input:
         runs-on: ubuntu-latest
-        needs: [ init_j ]
+        needs: [ init_j, prepare_input ]
+
+        strategy:
+          matrix: ${{ fromJSON(needs.prepare_input.outputs.matrix_input) }}
 
         steps:
           - name: Checkout Repo
@@ -39,4 +63,4 @@ jobs:
 
           - name: Run Python Script
             run: |
-                python ./scripts/greetings.py --name '${{ inputs.name }}' --place '${{ inputs.place }}'
+                python ./scripts/greetings.py --name '${{ inputs.name }}' --place '${{ matrix.place }}'

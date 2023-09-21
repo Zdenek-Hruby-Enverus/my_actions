@@ -11,6 +11,24 @@ env:
   ANOTHERVAR: var_${{ github.run_id }}
 
 jobs:
+  act-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Repo Checkout
+        uses: actions/checkout@v3
+
+      - name: test python setup
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - run:
+          echo "JAHSKAJHSKA"
+
+      - run:
+          python scripts/greetings.py --name ASD --place HSKDK
+
   check-bats-version:
     outputs:
         python_test: ${{ steps.check_path.outputs.my_path }}
