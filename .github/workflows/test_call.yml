@@ -48,6 +48,8 @@ jobs:
     prepare_all:
       runs-on: ubuntu-latest
 
+      if: ${{ inputs.place == 'All' }}
+
       outputs:
         matrix_input: ${{ steps.prepare_input.outputs.prepared_matrix }}
 
@@ -59,6 +61,8 @@ jobs:
 
     prepare_one:
       runs-on: ubuntu-latest
+
+      if: ${{ inputs.place != 'All' }}
 
       outputs:
         matrix_input: ${{ steps.prepare_input.outputs.prepared_matrix }}
