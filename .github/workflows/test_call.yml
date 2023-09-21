@@ -59,6 +59,10 @@ jobs:
           run: |
             echo "prepared_matrix={\"include\":[{\"place\": \"New York\"},{\"place\": \"Old York\"},{\"place\": \"ZOO York\"}]}" >> $GITHUB_OUTPUT
 
+        - name: Check Output
+          run: |
+            echo ${{ steps.prepare_input.outputs.prepared_matrix }}
+
     prepare_one:
       runs-on: ubuntu-latest
 
@@ -72,6 +76,10 @@ jobs:
           id: prepare_input
           run: |
             echo "prepared_matrix={\"include\":[{\"place\": ${{ inputs.place }} }]}" >> $GITHUB_OUTPUT
+
+        - name: Check Output
+          run: |
+            echo ${{ steps.prepare_input.outputs.prepared_matrix }}
 
     prepare_output:
       runs-on: ubuntu-latest
