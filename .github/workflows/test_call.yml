@@ -97,10 +97,14 @@ jobs:
                 echo "matrix_input=${{ needs.prepare_one.outputs.matrix_input }}" >> $GITHUB_OUTPUT
               fi
 
+        - name: Output check
+          run: |
+            echo ${{ steps.choose_result.outputs.matrix_input }}
+
 
     work_with_input:
         runs-on: ubuntu-latest
-        needs: [ init_j, prepare_output ]
+        needs: [ prepare_output ]
 
         strategy:
           matrix: ${{ fromJSON(needs.prepare_output.outputs.matrix_input) }}
