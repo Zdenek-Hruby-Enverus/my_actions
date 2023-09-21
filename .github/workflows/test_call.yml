@@ -92,7 +92,7 @@ jobs:
         ( needs.prepare_one.result == 'success' || needs.prepare_one.result == 'skipped' ) 
       
       outputs:
-        matrix_input: ${{ steps.choose_result.outputs.matrix_input }}
+        matrix_input: ${{ fromJson(steps.choose_result.outputs.matrix_input) }}
 
       steps:
         - name: Choose result
@@ -115,7 +115,7 @@ jobs:
         needs: [ prepare_output ]
 
         strategy:
-          matrix: ${{ fromJSON(needs.prepare_output.outputs.matrix_input) }}
+          matrix: ${{ needs.prepare_output.outputs.matrix_input }}
 
         steps:
           - name: Checkout Repo
