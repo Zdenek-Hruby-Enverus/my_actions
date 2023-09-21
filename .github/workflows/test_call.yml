@@ -95,20 +95,20 @@ jobs:
         matrix_input: ${{ steps.choose_result.outputs.matrix_input }}
 
       steps:
-        - name: Choose result
+        - name: Choose result from All
           id: choose_result
           run: |
-              if [[ ${{ needs.prepare_all.result == 'success' }} ]]
-              then
-                echo "matrix_input=${{ needs.prepare_all.outputs.matrix_input }}" >> $GITHUB_OUTPUT
-              else
-                echo "matrix_input=${{ needs.prepare_one.outputs.matrix_input }}" >> $GITHUB_OUTPUT
-              fi
+            if [ ${{ needs.prepare_one.result == 'success' }} ]
+            then
+              echo "matrix_input=${{ needs.prepare_all.outputs.matrix_input }}" >> $GITHUB_OUTPUT
+            else
+              echo "matrix_input=${{ needs.prepare_one.outputs.matrix_input }}" >> $GITHUB_OUTPUT
+            fi
+          shell: bash
 
         - name: Output check
           run: |
             echo ${{ steps.choose_result.outputs.matrix_input }}
-
 
     work_with_input:
         runs-on: ubuntu-latest
