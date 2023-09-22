@@ -34,6 +34,7 @@ jobs:
 
       outputs:
         matrix_input: ${{ steps.final_prepare.outputs.prepared_matrix }}
+        test_output: ${{ steps.test_result.outputs.test_output }}
 
       steps:
         - name: Prepared Input for All
@@ -42,7 +43,7 @@ jobs:
           run: |
             echo "PREPARED_MATRIX={\"include\":[{\"place\": \"New York\"},{\"place\": \"Old York\"},{\"place\": \"ZOO York\"}]}" >> $GITHUB_ENV
         
-        - name: Prepared Input for All
+        - name: Prepared Input for One
           id: prepare_input_one
           if: ${{ inputs.place != 'All' }}
           run: |
@@ -52,14 +53,36 @@ jobs:
           id: final_prepare
           run: |
             echo ${{ env.PREPARED_MATRIX }}
-            echo "prepared_matrix=${{ env.PREPARED_MATRIX }}" >> $GITHUB_OUTPUT
+            echo "prepared_matrix=${{ toJson(env.PREPARED_MATRIX) }}" >> $GITHUB_OUTPUT
+
+        - name: test
+          id: test_step
+          run: |
+            # echo "test_output={\"include\":[{\"place\": \"New York\"},{\"place\": \"Old York\"},{\"place\": \"ZOO York\"}]}" >> $GITHUB_OUTPUT
+            echo "test_output={\"include\":[{\"place\": \"${{ inputs.place }}\"}]}" >> $GITHUB_OUTPUT
+
+        - name: test_result
+          id: test_result
+          run: |
+            if [ ${{ steps.prepare_input_all.outcome}} == 'success' ]
+            then
+              echo "AAAAAAAAAAAAAAAAALLLLLLLLLLLLLLLLLLLLLL"
+              echo "test_output={\"include\":[{\"place\": \"New York\"},{\"place\": \"Old York\"},{\"place\": \"ZOO York\"}]}" >> $GITHUB_OUTPUT
+
+            elif [ ${{ steps.prepare_input_one.outcome}} == 'success' ]; then
+              echo "OOOOOOOOOOOONNNNNNNNEEEEEEE"
+              echo "test_output={\"include\":[{\"place\": \"${{ inputs.place }}\"}]}" >> $GITHUB_OUTPUT
+            else
+              echo "BLLLLLLLEEEEEEEEEEEEEEEEEEEEE"              
+            fi
+          shell: bash
 
     work_with_input:
       runs-on: ubuntu-latest
       needs: [ prepare_strategy_matrix ]
 
       strategy:
-        matrix: ${{ needs.prepare_strategy_matrix.outputs.matrix_input }}
+        matrix: ${{ fromJson(needs.prepare_strategy_matrix.outputs.test_output) }}
 
       steps:
         - name: Checkout Repo
