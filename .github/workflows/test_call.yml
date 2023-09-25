@@ -47,6 +47,8 @@ jobs:
     prepare_strategy_matrix:
       runs-on: ubuntu-latest
 
+      needs: [ init_j, init_k ]
+
 
       outputs:
         matrix_input: ${{ steps.final_prepare.outputs.prepared_matrix }}
