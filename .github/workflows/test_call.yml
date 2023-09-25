@@ -49,11 +49,7 @@ jobs:
 
       needs: [ init_j, init_k ]
 
-      if: |
-        always() &&
-        (needs.init_j.result == 'success' || needs.init_j.result == 'skipped') &&
-        (needs.init_k.result == 'success' || needs.init_k.result == 'skipped') &&
-        ! (needs.init_k.result == 'skipped' || needs.init_j.result == 'skipped')
+      if: always() && (${{ needs.init_j.result == 'success' || needs.init_j.result == 'skipped' }}) && (${{ needs.init_k.result == 'success' || needs.init_k.result == 'skipped' }})
 
 
       outputs:
