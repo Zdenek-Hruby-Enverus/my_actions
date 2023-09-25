@@ -3,6 +3,9 @@ name: calling a workflow
 run-name: ${{ github.actor }} is calling
 
 on:
+    pull_request:
+      branches: [ "main" ]
+
     workflow_dispatch:
         inputs:
             name:
@@ -21,12 +24,25 @@ on:
 
 jobs:
     init_j:
-        runs-on: ubuntu-latest
+      runs-on: ubuntu-latest
 
-        steps:
-          - name: Just Init
-            run: |
-                echo "Initilialization ..."
+      if: ${{ inputs.name == 'ASD' }}
+      
+      steps:
+        - name: Just Init
+          run: |
+            echo "Initilialization ..."
+
+    init_k:
+      runs-on: ubuntu-latest
+
+      if: ${{ inputs.name != 'ASD' }}
+
+      steps:
+        - name: Just Init
+          run: |
+            echo "Initilialization ..."
+
 
     prepare_strategy_matrix:
       runs-on: ubuntu-latest
@@ -35,6 +51,7 @@ jobs:
       outputs:
         matrix_input: ${{ steps.final_prepare.outputs.prepared_matrix }}
         test_output: ${{ steps.test_result.outputs.test_output }}
+        cond_output: ${{ steps.conditional_output.outputs.cond_output }}
 
       steps:
         - name: Prepared Input for All
@@ -77,9 +94,35 @@ jobs:
             fi
           shell: bash
 
+
+        - name: Conditional Output
+          id: conditional_output
+          run: |
+            if [[ ${{ github.event_name}} == 'workflow_dispatch' ]]; then
+              echo "RUNNING DISPATCH"
+              echo "cond_output=DISPATCHOUTPUT" >> $GITHUB_OUTPUT
+            elif [[ ${{ github.event_name }} == 'pull_request' ]]; then
+              echo "RUNNING PR"
+              echo "cond_output=PROUTPUT" >> $GITHUB_OUTPUT
+            else
+              echo "NEVIM"
+              echo "cond_output=NEVIMOUTPUT" >> $GITHUB_OUTPUT
+            fi
+
+    test_output:
+      runs-on: ubuntu-latest
+      needs: [ prepare_strategy_matrix ]
+
+      steps:
+        - name: Test Output
+          run: |
+            echo " ${{ needs.prepare_strategy_matrix.outputs.cond_output }} "
+
     work_with_input:
       runs-on: ubuntu-latest
       needs: [ prepare_strategy_matrix ]
+
+      if: ${{ github.event_name == 'workflow_dispatch' }}
 
       strategy:
         matrix: ${{ fromJson(needs.prepare_strategy_matrix.outputs.test_output) }}
