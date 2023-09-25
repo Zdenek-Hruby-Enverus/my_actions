@@ -43,6 +43,10 @@ jobs:
           run: |
             echo "Initilialization ..."
 
+        - name: test
+          run: |
+            echo ${{ inputs.place != 'New York' }}
+
 
     prepare_strategy_matrix:
       runs-on: ubuntu-latest
