@@ -49,7 +49,7 @@ jobs:
 
       needs: [ init_j, init_k ]
 
-      if: always()
+      if: always() && (${{ inputs.place != 'New York' }})
 
       outputs:
         matrix_input: ${{ steps.final_prepare.outputs.prepared_matrix }}
