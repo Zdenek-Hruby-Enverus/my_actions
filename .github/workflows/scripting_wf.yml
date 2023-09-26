@@ -95,7 +95,11 @@ jobs:
               if: ${{ github.event_name == 'pull_request' }}
               run: |
                 ntbs=(${{ needs.build.outputs.notebooks }})
+                echo "$ntbs"
+                echo "...................................."
                 packages=`echo $(echo ${ntbs[@]})`
+                echo "$packages"
+                echo "...................................."
                 echo "NTBS=[${packages}]" >> $GITHUB_ENV
 
             - name: Dispatch Output
