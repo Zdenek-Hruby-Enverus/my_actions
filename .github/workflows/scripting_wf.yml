@@ -22,7 +22,7 @@ jobs:
     build:
         runs-on: ubuntu-latest
 
-        if: ${{ github.event_name != 'workflow_dispatch' }}
+        # if: ${{ github.event_name != 'workflow_dispatch' }}
 
         outputs:
             notebooks: ${{ steps.get_chenged_files.outputs.ntbs }}
@@ -72,7 +72,14 @@ jobs:
             - name: Get Output
               id: get_output
               run: |
-                echo "ntbs=\"[${{ inputs.script_path }}]\"" >> $GITHUB_OUTPUT
+                echo "ntbs=[\"${{ inputs.script_path }}\"]" >> $GITHUB_OUTPUT
+
+            - name: Check Output
+              id: check_output
+              run: |
+                echo ${{ steps.get_output.outputs.ntbs }}
+                echo "Checking json ..."
+                echo ${{ fromJson( steps.get_output.outputs.ntbs ) }}
 
 
     deploy:
