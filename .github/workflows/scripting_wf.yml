@@ -82,7 +82,7 @@ jobs:
 
         strategy:
             matrix:
-                ntb: ${{ fromJson( toJson( needs.build.outputs.notebooks ) ) }}
+                ntb: ${{ fromJson( needs.build.outputs.notebooks ) }}
 
         steps:
             - name: Checkout repo
