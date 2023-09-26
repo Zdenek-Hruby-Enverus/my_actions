@@ -43,7 +43,7 @@ jobs:
                 modified_files=$(git diff --name-only  --diff-filter=ACMR origin/main..HEAD -- ./scripts \
                 | grep \.py | \
                 sort -u | \
-                while IFS= read -r n; do echo "{\"ntbs\": \"$n\"}"; done)
+                while IFS= read -r n; do echo "\"$n\""; done)
 
                 packages=`echo $(echo ${modified_files[@]}) | tr ' ' ','`
                 echo $packages
