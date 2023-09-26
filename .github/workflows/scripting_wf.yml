@@ -33,7 +33,7 @@ jobs:
             - name: Get changed files
               id: get_chenged_files
               run: |
-                modified_files=$(git diff --name-only  --diff-filter=ACMR  main..HEAD -- scripts | grep \.py | sort -u | while IFS= read -r n; do echo "\"$n\""; done)
+                modified_files=$(git diff --name-only  --diff-filter=ACMR  main..HEAD -- ./scripts | grep \.py | sort -u | while IFS= read -r n; do echo "\"$n\""; done)
                 packages=`echo $(echo ${modified_files[@]}) | tr ' ' ','`
                 echo $packages
                 if [ ${packages[0]} != '' ]; then
