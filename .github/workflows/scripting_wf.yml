@@ -110,14 +110,18 @@ jobs:
               id: check_output
               run: |
                 echo ${{ steps.unify_output.outputs.notebooks }}
+
+            - name: Check Json
+              run: |
                 echo "Checking json ..."
-                echo ${{ fromJson( env.NTBS ) }}
                 echo ${{ fromJson( steps.unify_output.outputs.notebooks ) }}
 
     deploy:
         runs-on: ubuntu-latest
 
         needs: [ unify_outputs ]
+
+        if: ${{ always() }}
 
         strategy:
             matrix:
