@@ -68,7 +68,7 @@ jobs:
             - name: Get Output
               id: get_output
               run: |
-                echo "ntbs=\"[$(inputs.script_path)]\"" >> $GITHUB_OUTPUT
+                echo "ntbs=\"[${{ inputs.script_path }}]\"" >> $GITHUB_OUTPUT
 
 
     deploy:
@@ -80,7 +80,7 @@ jobs:
 
         strategy:
             matrix:
-                ntb: ${{ fromJson( needs.build_dispatch.outputs.notebooks ) }}
+                ntb: ${{ fromJson( toJson( needs.build_dispatch.outputs.notebooks ) ) }}
 
         steps:
             - name: Checkout repo
