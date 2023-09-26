@@ -24,6 +24,7 @@ jobs:
 
         outputs:
             notebooks: ${{ steps.get_chenged_files.outputs.ntbs }}
+            change_exists: ${{ steps.get_chenged_files.outputs.change_exists }}
 
         steps:
             - name: Checkout repo
@@ -35,6 +36,11 @@ jobs:
                 modified_files=$(git diff --name-only  --diff-filter=ACMR  main..HEAD -- scripts | grep \.py | sort -u | while IFS= read -r n; do echo "\"$n\""; done)
                 packages=`echo $(echo ${modified_files[@]}) | tr ' ' ','`
                 echo $packages
+                if [ ${packages[0]} != '' ]; then
+                    echo "change_exists=true" >> $GITHUB_OUTPUT
+                else
+                    echo "change_exists=false" >> $GITHUB_OUTPUT
+
                 echo "ntbs=\"[${packages}]\"" >> $GITHUB_OUTPUT
 
             - name: Check Output
@@ -46,6 +52,8 @@ jobs:
 
     deploy:
         runs-on: ubuntu-latest
+
+        if: ${{ always() && (needs.build.outputs.change_exists == 'true') }}
 
         needs: [ build ]
 
