@@ -109,7 +109,7 @@ jobs:
                 IFS=',' read -r -a ntbs <<< "${{ env.notebooks_env }}"
                 echo "Checkoing output ...."
                 echo "${ntbs[@]}"
-                new_ntbs=echo "${ntbs[@]}" | while IFS= read -r n; do echo "\"$n\""; done
+                new_ntbs=$(echo "${ntbs[@]}" | while IFS= read -r n; do echo "\"$n\""; done)
                 echo "${new_ntbs}"
                 packages=$(echo $(echo ${new_ntbs[@]}) | tr ' ' ',')
                 echo "PACKAGES ..."
