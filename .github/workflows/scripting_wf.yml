@@ -50,7 +50,7 @@ jobs:
                     echo "change_exists=false" >> $GITHUB_OUTPUT
                 fi
 
-                echo "ntbs=\"[${packages}]\"" >> $GITHUB_OUTPUT
+                echo "ntbs=[${packages}]" >> $GITHUB_OUTPUT
 
             - name: Check Output
               id: check_output
