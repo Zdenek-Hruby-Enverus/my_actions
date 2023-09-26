@@ -103,7 +103,7 @@ jobs:
             - name: Unify Output
               id: unify_output
               run: |
-                echo "matrix=${{ toJson( env.matrix_env ) }}" >> $GITHUB_OUTPUT
+                echo "matrix=${{ env.matrix_env }}" >> $GITHUB_OUTPUT
 
             - name: Check Output
               id: check_output
