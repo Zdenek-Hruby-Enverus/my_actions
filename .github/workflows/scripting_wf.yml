@@ -27,6 +27,7 @@ jobs:
         outputs:
             notebooks: ${{ steps.get_chenged_files.outputs.ntbs }}
             change_exists: ${{ steps.get_chenged_files.outputs.change_exists }}
+            notebooks_json:  ${{ steps.get_chenged_files.outputs.ntbs_json }}
 
         steps:
             - name: Checkout repo
@@ -53,7 +54,12 @@ jobs:
                     echo "change_exists=false" >> $GITHUB_OUTPUT
                 fi
 
-                echo "ntbs=${packages}" >> $GITHUB_OUTPUT
+                echo "ntbs=[${packages}]" >> $GITHUB_OUTPUT
+
+            - name: Output Json
+              id: output_json
+              run: |
+                echo "ntbs_json=${{ fromJson( steps.get_chenged_files.outputs.ntbs ) }}"
 
             - name: Check Output
               id: check_output
@@ -87,42 +93,47 @@ jobs:
         if: ${{ always() }}
 
         outputs:
-            notebooks: ${{ steps.unify_output.outputs.notebooks }}
+            notebooks_json: ${{ steps.output_json.outputs.notebooks_json }}
 
         steps:
             - name: PR Output
               if: ${{ github.event_name == 'pull_request' }}
               run: |
-                echo "notebooks_env=${{ needs.build.outputs.notebooks }}" >> $GITHUB_ENV
+                echo "notebooks_env=${{ needs.build.outputs.notebooks_json }}" >> $GITHUB_ENV
 
             - name: Dispatch Output
               if: ${{ github.event_name == 'workflow_dispatch' }}
               run: |
                 echo "notebooks_env=${{ needs.build_dispatch.outputs.notebooks }}" >> $GITHUB_ENV
 
-            - name: Unify Output
-              id: unify_output
-              run: |
-                echo "${{ env.notebooks_env }}"
-                IFS=',' read -r -a ntbs <<< "${{ env.notebooks_env }}"
-                echo "Checkoing output ...."
-                echo "${ntbs[@]}"
-                new_ntbs=$(echo "${ntbs[@]}" | while IFS=' ' read -r n; do echo "\"$n\""; done)
-                echo "${new_ntbs}"
-                packages=$(echo $(echo ${new_ntbs[@]}) | tr ' ' ',')
-                echo "PACKAGES ..."
-                echo "$packages"
-                echo "notebooks=[${packages}]" >> $GITHUB_OUTPUT
+            # - name: Unify Output
+            #   id: unify_output
+            #   run: |
+            #     echo "${{ env.notebooks_env }}"
+            #     IFS=',' read -r -a ntbs <<< "${{ env.notebooks_env }}"
+            #     echo "Checkoing output ...."
+            #     echo "${ntbs[@]}"
+            #     new_ntbs=$(echo "${ntbs[@]}" | while IFS=' ' read -r n; do echo "\"$n\""; done)
+            #     echo "${new_ntbs}"
+            #     packages=$(echo $(echo ${new_ntbs[@]}) | tr ' ' ',')
+            #     echo "PACKAGES ..."
+            #     echo "$packages"
+            #     echo "notebooks=[${packages}]" >> $GITHUB_OUTPUT
 
-            - name: Check Output
-              id: check_output
+            - name: Output Json
+              id: output_json
               run: |
-                echo ${{ steps.unify_output.outputs.notebooks }}
+                echo "notebooks_json=${{ env.notebooks_env }}"
 
-            - name: Check Json
-              run: |
-                echo "Checking json ..."
-                echo ${{ fromJson( steps.unify_output.outputs.notebooks ) }}
+            # - name: Check Output
+            #   id: check_output
+            #   run: |
+            #     echo ${{ steps.unify_output.outputs.notebooks }}
+
+            # - name: Check Json
+            #   run: |
+            #     echo "Checking json ..."
+            #     echo ${{ fromJson( steps.unify_output.outputs.notebooks ) }}
 
     deploy:
         runs-on: ubuntu-latest
@@ -133,7 +144,7 @@ jobs:
 
         strategy:
             matrix:
-              ntb: ${{ needs.unify_outputs.outputs.notebooks }}
+              ntb: ${{ needs.unify_outputs.outputs.notebooks_json }}
 
         steps:
             - name: Checkout repo
