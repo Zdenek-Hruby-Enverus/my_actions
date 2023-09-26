@@ -111,6 +111,8 @@ jobs:
               run: |
                 echo ${{ steps.unify_output.outputs.notebooks }}
                 echo "Checking json ..."
+                echo ${{ fromJson( env.NTBS ) }}
+                echo ${{ fromJson( steps.unify_output.outputs.notebooks ) }}
 
     deploy:
         runs-on: ubuntu-latest
