@@ -61,6 +61,9 @@ jobs:
 
         if: ${{ github.event_name == 'workflow_dispatch' }}
 
+        outputs:
+            notebooks: ${{ steps.get_output.outputs.ntbs }}
+
         steps:
             - name: Get Output
               id: get_output
@@ -77,7 +80,7 @@ jobs:
 
         strategy:
             matrix:
-                ntb: ${{ fromJson( needs.build.outputs.notebooks ) }}
+                ntb: ${{ fromJson( needs.build_dispatch.outputs.notebooks ) }}
 
         steps:
             - name: Checkout repo
