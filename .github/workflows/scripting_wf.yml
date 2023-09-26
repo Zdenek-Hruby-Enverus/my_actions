@@ -1,0 +1,60 @@
+name: calling a workflow
+
+run-name: ${{ github.actor }} is calling
+
+on:
+    pull_request:
+      branches: [ "main" ]
+
+    workflow_dispatch:
+        inputs:
+            script_path:
+                type: string
+                required: true
+
+jobs:
+    # find_script:
+    #     runs-on: ubuntu-latest
+
+    #     steps:
+    #         - name:
+
+    build:
+        runs-on: ubuntu-latest
+
+        outputs:
+            notebooks: ${{ steps.get_chenged_files.outputs.noteboks }}
+
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v3
+
+            - name: Get changed files
+              id: get_chenged_files
+              run: |
+                modified_files=$(git diff --name-only --diff-filter=ACMR main..HEAD -- scripts | grep \.py | sort -u | while IFS= read -r n; do echo "\"$n\""; done)
+                packages=`echo $(echo ${modified_files[@]}) | tr ' ' ','`
+                notebooks="[${packages}]" >> $GITHUB_OUTPUT
+
+    deploy:
+        runs-on: ubuntu-latest
+
+        needs: [ build ]
+
+        strategy:
+            matrix:
+                ntb: ${{ needs.build.outputs.notebooks }}
+
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v3
+    
+            - name: Set up Python 3.9
+              uses: actions/setup-python@v2
+              with:
+                python-version: "3.9"
+        
+            - name: Run Changed Scripts
+              id: run_scripts
+              run: |
+                python ${{ matrix.ntb }}
