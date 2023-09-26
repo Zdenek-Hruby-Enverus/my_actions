@@ -57,6 +57,8 @@ jobs:
               run: |
                 echo "Cechking output ..."
                 echo ${{ steps.get_chenged_files.outputs.ntbs }}
+                echo "Checking output json ..."
+                echo ${{ fromJson( steps.get_chenged_files.outputs.ntbs ) }}
 
     build_dispatch:
         runs-on: ubuntu-latest
