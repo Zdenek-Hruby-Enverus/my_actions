@@ -25,7 +25,7 @@ jobs:
         if: ${{ github.event_name != 'workflow_dispatch' }}
 
         outputs:
-            notebooks: ${{ steps.get_chenged_files.outputs.ntbs }}
+            notebooks: ${{ steps.get_chenged_files.outputs.matrix }}
             change_exists: ${{ steps.get_chenged_files.outputs.change_exists }}
 
         steps:
@@ -40,12 +40,10 @@ jobs:
             - name: Get changed files
               id: get_chenged_files
               run: |
-                git fetch origin main
-                if [ ${{ github.event_name == 'pullrequest' }} ]; then
-                    modified_files=$(git diff --name-only  --diff-filter=ACMR origin/main..HEAD -- ./scripts | grep \.py | sort -u | while IFS= read -r n; do echo "\"$n\""; done)
-                else
-                    modified_files=$(git diff --name-only  --diff-filter=ACMR origin/HEAD~1..HEAD -- ./scripts | grep \.py | sort -u | while IFS= read -r n; do echo "\"$n\""; done)
-                fi
+                modified_files=$(git diff --name-only  --diff-filter=ACMR origin/main..HEAD -- ./scripts \
+                | grep \.py | \
+                sort -u | \
+                while IFS= read -r n; do echo "{\"ntbs\": \"$n\"}"; done)
 
                 packages=`echo $(echo ${modified_files[@]}) | tr ' ' ','`
                 echo $packages
@@ -55,13 +53,13 @@ jobs:
                     echo "change_exists=false" >> $GITHUB_OUTPUT
                 fi
 
-                echo "ntbs=${packages}" >> $GITHUB_OUTPUT
+                echo "matrix={\"include\":[${packages}]}" >> $GITHUB_OUTPUT
 
             - name: Check Output
               id: check_output
               run: |
                 echo "Cechking output ..."
-                echo ${{ steps.get_chenged_files.outputs.ntbs }}
+                echo ${{ steps.get_chenged_files.outputs.matrix }}
 
     build_dispatch:
         runs-on: ubuntu-latest
@@ -89,13 +87,13 @@ jobs:
         if: ${{ always() }}
 
         outputs:
-            notebooks: ${{ steps.unify_output.outputs.notebooks }}
+            matrix: ${{ steps.unify_output.outputs.matrix }}
 
         steps:
             - name: PR Output
               if: ${{ github.event_name == 'pull_request' }}
               run: |
-                echo "notebooks_env=${{ needs.build.outputs.notebooks }}" >> $GITHUB_ENV
+                echo "matrix_env=${{ needs.build.outputs.notebooks }}" >> $GITHUB_ENV
 
             - name: Dispatch Output
               if: ${{ github.event_name == 'workflow_dispatch' }}
@@ -105,26 +103,17 @@ jobs:
             - name: Unify Output
               id: unify_output
               run: |
-                echo "${{ env.notebooks_env }}"
-                IFS=',' read -r -a ntbs <<< "${{ env.notebooks_env }}"
-                echo "Checkoing output ...."
-                echo "${ntbs[@]}"
-                new_ntbs=$(echo "${ntbs[@]}" | while IFS=' ' read -r n; do echo "\"$n\""; done)
-                echo "${new_ntbs}"
-                packages=$(echo $(echo ${new_ntbs[@]}) | tr ' ' ',')
-                echo "PACKAGES ..."
-                echo "$packages"
-                echo "notebooks=[${packages}]" >> $GITHUB_OUTPUT
+                echo "matrix=${{ toJson( env.matrix_env ) }}" >> $GITHUB_OUTPUT
 
             - name: Check Output
               id: check_output
               run: |
-                echo ${{ steps.unify_output.outputs.notebooks }}
+                echo ${{ steps.unify_output.outputs.matrix }}
 
             - name: Check Json
               run: |
                 echo "Checking json ..."
-                echo ${{ fromJson( steps.unify_output.outputs.notebooks ) }}
+                echo ${{ fromJson( steps.unify_output.outputs.matrix ) }}
 
     deploy:
         runs-on: ubuntu-latest
@@ -134,7 +123,7 @@ jobs:
         if: ${{ always() }}
 
         strategy:
-            matrix: ${{ fromJson( needs.unify_outputs.outputs.notebooks ) }}
+            matrix: ${{ fromJson( needs.unify_outputs.outputs.matrix ) }}
 
         steps:
             - name: Checkout repo
