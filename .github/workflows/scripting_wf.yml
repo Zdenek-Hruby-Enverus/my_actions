@@ -39,6 +39,7 @@ jobs:
             - name: Get changed files
               id: get_chenged_files
               run: |
+                git fetch origin main
                 modified_files=$(git diff --name-only  --diff-filter=ACMR main..HEAD -- ./scripts | grep \.py | sort -u | while IFS= read -r n; do echo "\"$n\""; done)
                 packages=`echo $(echo ${modified_files[@]}) | tr ' ' ','`
                 echo $packages
