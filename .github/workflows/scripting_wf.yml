@@ -105,7 +105,7 @@ jobs:
             - name: Unify Output
               id: unify_output
               run: |
-                IFS=',' read -r -a ntbs << "${{ env.notebooks_env }}"
+                IFS=',' read -r -a ntbs <<< "${{ env.notebooks_env }}"
                 echo "Checkoing output ...."
                 echo "$ntbs"
                 packages=`echo $(echo ${ntbs[@]}) | tr ' ' ','`
