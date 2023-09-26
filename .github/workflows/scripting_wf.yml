@@ -55,15 +55,13 @@ jobs:
                     echo "change_exists=false" >> $GITHUB_OUTPUT
                 fi
 
-                echo "ntbs=[${packages}]" >> $GITHUB_OUTPUT
+                echo "ntbs=${packages}" >> $GITHUB_OUTPUT
 
             - name: Check Output
               id: check_output
               run: |
                 echo "Cechking output ..."
                 echo ${{ steps.get_chenged_files.outputs.ntbs }}
-                echo "Checking output json ..."
-                echo ${{ fromJson( steps.get_chenged_files.outputs.ntbs ) }}
 
     build_dispatch:
         runs-on: ubuntu-latest
@@ -77,14 +75,12 @@ jobs:
             - name: Get Output
               id: get_output
               run: |
-                echo "ntbs=[\"${{ inputs.script_path }}\"]" >> $GITHUB_OUTPUT
+                echo "ntbs=\"${{ inputs.script_path }}\"" >> $GITHUB_OUTPUT
 
             - name: Check Output
               id: check_output
               run: |
                 echo ${{ steps.get_output.outputs.ntbs }}
-                echo "Checking json ..."
-                echo ${{ fromJson( steps.get_output.outputs.ntbs ) }}
 
     unify_outputs:
         runs-on: ubuntu-latest
@@ -99,19 +95,21 @@ jobs:
             - name: PR Output
               if: ${{ github.event_name == 'pull_request' }}
               run: |
-                ntbs=${{ needs.build.outputs.notebooks }} | grep \.py | sort -u | while IFS= read -r n; do echo "\"$n\""; done
-                echo "$ntbs"
-                echo "NTBS=${ntbs}" >> $GITHUB_ENV
+                echo "notebooks_env=${{ needs.build.outputs.notebooks }}" >> $GITHUB_ENV
 
             - name: Dispatch Output
               if: ${{ github.event_name == 'workflow_dispatch' }}
               run: |
-                echo "NTBS={\"include\":[{\"ntb\": \"${{ needs.build_dispatch.outputs.notebooks }}\"}]}" >> $GITHUB_ENV
+                echo "notebooks_env=${{ needs.build_dispatch.outputs.notebooks }}" >> $GITHUB_ENV
 
             - name: Unify Output
               id: unify_output
               run: |
-                echo "notebooks=${{ env.NTBS }}" >> $GITHUB_OUTPUT
+                IFS=',' read -r -a ntbs << "${{ env.notebooks_env }}"
+                echo "Checkoing output ...."
+                echo "$ntbs"
+                packages=`echo $(echo ${ntbs[@]}) | tr ' ' ','`
+                echo "notebooks=[${packages}]" >> $GITHUB_OUTPUT
 
             - name: Check Output
               id: check_output
