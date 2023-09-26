@@ -94,20 +94,12 @@ jobs:
             - name: PR Output
               if: ${{ github.event_name == 'pull_request' }}
               run: |
-                ntbs=(${{ needs.build.outputs.notebooks }})
-                echo "$ntbs"
-                echo "...................................."
-                packages=`echo $(echo ${ntbs[@]})`
-                echo "$packages"
-                echo "...................................."
-                echo "NTBS=[${packages}]" >> $GITHUB_ENV
+                echo "NTBS={\"include\":[{\"ntb\": \"${{ needs.build.outputs.notebooks }}\"}]}" >> $GITHUB_ENV
 
             - name: Dispatch Output
               if: ${{ github.event_name == 'workflow_dispatch' }}
               run: |
-                ntbs=(${{ needs.build_dispatch.outputs.notebooks }})
-                packages=`echo $(echo ${ntbs[@]})`
-                echo "NTBS=[${packages}]" >> $GITHUB_ENV
+                echo "NTBS={\"include\":[{\"ntb\": \"${{ needs.build_dispatch.outputs.notebooks }}\"}]}" >> $GITHUB_ENV
 
             - name: Unify Output
               id: unify_output
@@ -132,8 +124,7 @@ jobs:
         if: ${{ always() }}
 
         strategy:
-            matrix:
-                ntb: ${{ fromJson( needs.unify_outputs.outputs.notebooks ) }}
+            matrix: ${{ fromJson( needs.unify_outputs.outputs.notebooks ) }}
 
         steps:
             - name: Checkout repo
