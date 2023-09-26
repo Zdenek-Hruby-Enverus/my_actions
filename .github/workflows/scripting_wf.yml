@@ -32,9 +32,7 @@ jobs:
             - name: Get changed files
               id: get_chenged_files
               run: |
-                modified_files=$(git diff --name-only --diff-filter=ACMR main..HEAD -- scripts | grep \.py | sort -u | while IFS= read -r n; do echo "\"$n\""; done)
-                packages=`echo $(echo ${modified_files[@]}) | tr ' ' ','`
-                notebooks="[${packages}]" >> $GITHUB_OUTPUT
+                git diff --name-only  --diff-filter=ACMR main..HEAD -- scripts | grep \.py | sort -u | while IFS= read -r n; do echo "\"$n\""; done
 
     deploy:
         runs-on: ubuntu-latest
