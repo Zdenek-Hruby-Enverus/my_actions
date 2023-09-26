@@ -34,7 +34,7 @@ jobs:
               run: |
                 modified_files=$(git diff --name-only  --diff-filter=ACMR main..HEAD -- scripts | grep \.py | sort -u | while IFS= read -r n; do echo "\"$n\""; done)
                 packages=`echo $(echo ${modified_files[@]}) | tr ' ' ','`
-                ntbs="[${packages}]" >> $GITHUB_OUTPUT
+                echo "ntbs=\"[${packages}]\"" >> $GITHUB_OUTPUT
 
     deploy:
         runs-on: ubuntu-latest
