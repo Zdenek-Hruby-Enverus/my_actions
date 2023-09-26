@@ -34,7 +34,8 @@ jobs:
 
             - name: Check Diff
               run: |
-                echo $(git diff main --)
+                git fetch origin main
+                echo $(git diff main)
 
             - name: Get changed files
               id: get_chenged_files
