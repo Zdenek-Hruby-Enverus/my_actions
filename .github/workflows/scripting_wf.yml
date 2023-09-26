@@ -53,7 +53,7 @@ jobs:
                     echo "change_exists=false" >> $GITHUB_OUTPUT
                 fi
 
-                echo "ntbs=[${packages}]" >> $GITHUB_OUTPUT
+                echo "ntbs=${packages}" >> $GITHUB_OUTPUT
 
             - name: Check Output
               id: check_output
@@ -112,7 +112,7 @@ jobs:
                 packages=$(echo $(echo ${new_ntbs[@]}) | tr ' ' ',')
                 echo "PACKAGES ..."
                 echo "$packages"
-                echo "notebooks=[${packages}]" >> $GITHUB_OUTPUT
+                echo "notebooks=${packages}" >> $GITHUB_OUTPUT
 
             - name: Check Output
               id: check_output
