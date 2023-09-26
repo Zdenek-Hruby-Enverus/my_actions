@@ -30,6 +30,10 @@ jobs:
             - name: Checkout repo
               uses: actions/checkout@v3
 
+            - name: Check Diff
+              run: |
+                echo $(git diff main)
+
             - name: Get changed files
               id: get_chenged_files
               run: |
