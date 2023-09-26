@@ -68,7 +68,7 @@ jobs:
             - name: Get Output
               id: get_output
               run: |
-                echo "ntbs=\"[${{ inputs.script_path }}]\"" >> $GITHUB_OUTPUT
+                echo "ntbs=\"[${inputs.script_path}]\"" >> $GITHUB_OUTPUT
 
 
     deploy:
