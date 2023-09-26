@@ -94,12 +94,16 @@ jobs:
             - name: PR Output
               if: ${{ github.event_name == 'pull_request' }}
               run: |
-                echo "NTBS=${{ needs.build.outputs.notebooks }}" >> $GITHUB_ENV
+                ntbs=(${{ needs.build.outputs.notebooks }})
+                packages=`echo $(echo ${ntbs[@]})`
+                echo "NTBS=[${packages}]" >> $GITHUB_ENV
 
             - name: Dispatch Output
               if: ${{ github.event_name == 'workflow_dispatch' }}
               run: |
-                echo "NTBS=${{ needs.build_dispatch.outputs.notebooks }}" >> $GITHUB_ENV
+                ntbs=(${{ needs.build_dispatch.outputs.notebooks }})
+                packages=`echo $(echo ${ntbs[@]})`
+                echo "NTBS=[${packages}]" >> $GITHUB_ENV
 
             - name: Unify Output
               id: unify_output
