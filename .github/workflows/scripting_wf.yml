@@ -44,7 +44,11 @@ jobs:
                 | grep \.py | sort -u | \
                 while IFS= read -r n; do echo "\"$n\""; done )
 
-                output_str=`echo $(echo ${modified_files_str[@]}) | tr ' ' ','`
+                echo "${modified_files}"
+
+                output_str=`echo $(echo ${modified_files[@]}) | tr ' ' ','`
+
+                echo "${output_str}"
 
                 if [[ -z output_str[0] ]]; then
                     echo "change_exists=false" >> $GITHUB_OUTPUT
