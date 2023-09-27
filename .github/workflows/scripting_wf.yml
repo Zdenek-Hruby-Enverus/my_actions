@@ -56,7 +56,7 @@ jobs:
                 if [[ -z output_str[0] ]]; then
                     echo "change_exists=false" >> $GITHUB_OUTPUT
                     echo "EXISTS FALSE"
-                elif [ "$file_exists" == true ]
+                elif [ "$file_exists" == true ]; then
                     echo "EXISTS TRUE"
                     echo "change_exists=true" >> $GITHUB_OUTPUT
                 else
