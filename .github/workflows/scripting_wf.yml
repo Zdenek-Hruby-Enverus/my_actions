@@ -42,9 +42,8 @@ jobs:
               run: |
                 modified_files=$(git diff --name-only  --diff-filter=ACMR origin/main..HEAD -- ./scripts \
                 | grep \.py | \
-                sort -u )
-
-                modified_files_str=`echo "${modified_files}" | while IFS= read -r n; do echo "\"$n\""; done`
+                sort -u | \
+                while IFS= read -r n; do echo "\"$n\""; done )
 
                 output_str=`echo $(echo ${modified_files_str[@]}) | tr ' ' ','`
 
@@ -54,7 +53,7 @@ jobs:
                     echo "change_exists=true" >> $GITHUB_OUTPUT
                 fi
 
-                echo "ntbs=${output_str}" >> $GITHUB_OUTPUT
+                echo "ntbs=[${output_str}]" >> $GITHUB_OUTPUT
 
             - name: Check Output
               id: check_output
@@ -81,58 +80,58 @@ jobs:
               run: |
                 echo ${{ steps.get_output.outputs.ntbs }}
 
-    unify_outputs:
-        runs-on: ubuntu-latest
-        needs: [ build, build_dispatch ]
+    # unify_outputs:
+    #     runs-on: ubuntu-latest
+    #     needs: [ build, build_dispatch ]
 
-        if: ${{ always() }}
+    #     if: ${{ always() }}
 
-        outputs:
-            notebooks_json: ${{ steps.output_json.outputs.notebooks }}
+    #     outputs:
+    #         notebooks_json: ${{ steps.output_json.outputs.notebooks }}
 
-        steps:
-            - name: PR Output
-              if: ${{ github.event_name == 'pull_request' }}
-              run: |
-                echo "notebooks_env=${{ needs.build.outputs.notebooks }}" >> $GITHUB_ENV
+    #     steps:
+    #         - name: PR Output
+    #           if: ${{ github.event_name == 'pull_request' }}
+    #           run: |
+    #             echo "notebooks_env=${{ needs.build.outputs.notebooks }}" >> $GITHUB_ENV
 
-            - name: Dispatch Output
-              if: ${{ github.event_name == 'workflow_dispatch' }}
-              run: |
-                echo "notebooks_env=${{ needs.build_dispatch.outputs.notebooks }}" >> $GITHUB_ENV
+    #         - name: Dispatch Output
+    #           if: ${{ github.event_name == 'workflow_dispatch' }}
+    #           run: |
+    #             echo "notebooks_env=${{ needs.build_dispatch.outputs.notebooks }}" >> $GITHUB_ENV
 
-            - name: Unify Output
-              id: unify_output
-              run: |
-                echo "${{ env.notebooks_env }}"
-                packages=`echo "${{ env.notebooks_env }}" | while IFS= read -r n; do echo "\"$n\""; done`
-                ntbs_list=`echo "${packages}" | tr '\n' '\",\"'`
+    #         - name: Unify Output
+    #           id: unify_output
+    #           run: |
+    #             echo "${{ env.notebooks_env }}"
+    #             packages=`echo "${{ env.notebooks_env }}" | while IFS= read -r n; do echo "\"$n\""; done`
+    #             ntbs_list=`echo "${packages}" | tr '\n' '\",\"'`
 
-                echo "Checking ..."
-                echo "${ntbs_list}"
+    #             echo "Checking ..."
+    #             echo "${ntbs_list}"
 
-                echo "notebooks=[${ntbs_list}]" >> $GITHUB_OUTPUT
+    #             echo "notebooks=[${ntbs_list}]" >> $GITHUB_OUTPUT
 
-            - name: Check Output
-              id: check_output
-              run: |
-                echo ${{ steps.unify_output.outputs.notebooks }}
+    #         - name: Check Output
+    #           id: check_output
+    #           run: |
+    #             echo ${{ steps.unify_output.outputs.notebooks }}
 
-            - name: Check Json
-              run: |
-                echo "Checking json ..."
-                echo ${{ fromJson( steps.unify_output.outputs.notebooks ) }}
+    #         - name: Check Json
+    #           run: |
+    #             echo "Checking json ..."
+    #             echo ${{ fromJson( steps.unify_output.outputs.notebooks ) }}
 
     deploy:
         runs-on: ubuntu-latest
 
-        needs: [ unify_outputs ]
+        needs: [ build ]
 
-        if: ${{ always() && (github.event_name == 'asd') }}
+        if: ${{ always() && ( needs.build.outputs.change_exists == 'true' ) }}
 
         strategy:
             matrix:
-              ntb: ${{ needs.unify_outputs.outputs.notebooks_json }}
+              ntb: ${{ needs.build.outputs.notebooks }}
 
         steps:
             - name: Checkout repo
