@@ -16,6 +16,8 @@ jobs:
     build:
         runs-on: ubuntu-latest
 
+        if: ${{ ( github.event_name == 'pull_request' ) || github.event_name == 'workflow_dispatch' }}
+
         outputs:
             notebooks: ${{ steps.get_chenged_files.outputs.ntbs }}
             change_exists: ${{ steps.get_chenged_files.outputs.change_exists }}
@@ -39,21 +41,31 @@ jobs:
                   output_str=`echo $(echo ${modified_files[@]}) | tr ' ' ','`
                   echo "PR!"
                   echo "${output_str}"
+                  file_exists=true
                 elif [[ ${{ github.event_name }} == 'workflow_dispatch' ]]; then
                   output_str=`echo "\"${{ inputs.script_path }}\""`
                   echo "DISPATCH!"
                   echo "${output_str}"
+                  if [[ -f ${{ inputs.script_path }} ]]; then
+                    file_exists=true
+                  else
+                    file_exists=false
+                  fi
                 fi
 
                 if [[ -z output_str[0] ]]; then
                     echo "change_exists=false" >> $GITHUB_OUTPUT
                     echo "EXISTS FALSE"
-                else
+                elif [ "$file_exists" == true ]
                     echo "EXISTS TRUE"
                     echo "change_exists=true" >> $GITHUB_OUTPUT
+                else
+                    echo "change_exists=false" >> $GITHUB_OUTPUT
                 fi
 
                 echo "ntbs=[${output_str}]" >> $GITHUB_OUTPUT
+
+                echo "${output_str[@]} added"
 
             - name: Check Output
               id: check_output
