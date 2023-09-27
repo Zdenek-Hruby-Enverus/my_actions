@@ -136,7 +136,7 @@ jobs:
 
         strategy:
             matrix:
-              ntb: ${{ needs.build.outputs.notebooks }}
+              ntb: ${{ fromJson( needs.build.outputs.notebooks ) }}
 
         steps:
             - name: Checkout repo
