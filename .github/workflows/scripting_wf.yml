@@ -46,7 +46,7 @@ jobs:
                   output_str=`echo "\"${{ inputs.script_path }}\""`
                   echo "DISPATCH!"
                   echo "${output_str}"
-                  if [[ -f ${{ inputs.script_path }} ]]; then
+                  if [ -f ${{ inputs.script_path }} ]; then
                     file_exists=true
                   else
                     file_exists=false
