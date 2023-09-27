@@ -41,16 +41,17 @@ jobs:
               id: get_chenged_files
               run: |
                 modified_files=$(git diff --name-only  --diff-filter=ACMR origin/main..HEAD -- ./scripts \
-                | grep \.py | \
-                sort -u | \
+                | grep \.py | sort -u | \
                 while IFS= read -r n; do echo "\"$n\""; done )
 
                 output_str=`echo $(echo ${modified_files_str[@]}) | tr ' ' ','`
 
-                if [[ -z $modified_files ]]; then
+                if [[ -z output_str[0] ]]; then
                     echo "change_exists=false" >> $GITHUB_OUTPUT
+                    echo "FALSE EXISTS"
                 else
                     echo "change_exists=true" >> $GITHUB_OUTPUT
+                    echo "TRUE EXISTS"
                 fi
 
                 echo "ntbs=[${output_str}]" >> $GITHUB_OUTPUT
