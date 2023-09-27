@@ -132,7 +132,7 @@ jobs:
 
         needs: [ build ]
 
-        if: ${{ always() && ( needs.build.outputs.change_exists == 'true' ) }}
+        if: ${{ always() && ( fromJson( needs.build.outputs.change_exists ) ) }}
 
         strategy:
             matrix:
