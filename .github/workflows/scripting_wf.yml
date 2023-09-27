@@ -44,7 +44,9 @@ jobs:
                 | grep \.py | \
                 sort -u )
 
-                modified_files_output=`echo "${modified_files}" | while IFS= read -r n; do echo "\"$n\""; done`
+                modified_files_str=`echo "${modified_files}" | while IFS= read -r n; do echo "\"$n\""; done`
+
+                output_str=`echo $(echo ${modified_files_str[@]}) | tr ' ' ','`
 
                 if [[ -z $modified_files ]]; then
                     echo "change_exists=false" >> $GITHUB_OUTPUT
@@ -52,7 +54,7 @@ jobs:
                     echo "change_exists=true" >> $GITHUB_OUTPUT
                 fi
 
-                echo "ntbs=${modified_files_output}" >> $GITHUB_OUTPUT
+                echo "ntbs=${output_str}" >> $GITHUB_OUTPUT
 
             - name: Check Output
               id: check_output
