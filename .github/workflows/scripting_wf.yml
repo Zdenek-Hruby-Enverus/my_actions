@@ -40,7 +40,7 @@ jobs:
                   echo "PR!"
                   echo "${output_str}"
                 elif [[ ${{ github.event_name }} == 'workflow_dispatch' ]]; then
-                  output_str = echo "\"${{ inputs.script_path }}\""
+                  output_str=`echo "\"${{ inputs.script_path }}\""`
                   echo "DISPATCH!"
                   echo "${output_str}"
                 fi
