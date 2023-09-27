@@ -32,14 +32,14 @@ jobs:
             - name: Get changed files
               id: get_chenged_files
               run: |
-                if [ ${{ github.event_name }}  == 'pull_request']; then
+                if [[ ${{ github.event_name }}  == 'pull_request' ]]; then
                   modified_files=$(git diff --name-only  --diff-filter=ACMR origin/main..HEAD -- ./scripts \
                   | grep \.py | sort -u | \
                   while IFS= read -r n; do echo "\"$n\""; done )
                   output_str=`echo $(echo ${modified_files[@]}) | tr ' ' ','`
                   echo "PR!"
                   echo "${output_str}"
-                elif [ ${{ github.event_name }} == 'workflow_dispatch' ]; then
+                elif [[ ${{ github.event_name }} == 'workflow_dispatch' ]]; then
                   output_str = echo "\"${{ inputs.script_path }}\""
                   echo "DISPATCH!"
                   echo "${output_str}"
