@@ -30,7 +30,6 @@ jobs:
                 echo $(git diff origin/main)
 
             - name: Get changed files
-              if: ${{ github.event_name == 'pull_request' }}
               id: get_chenged_files
               run: |
                 if [ ${{ github.event_name == 'pull_request' }} ]; then
