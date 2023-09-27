@@ -13,16 +13,8 @@ on:
                 required: true
 
 jobs:
-    # find_script:
-    #     runs-on: ubuntu-latest
-
-    #     steps:
-    #         - name:
-
     build:
         runs-on: ubuntu-latest
-
-        if: ${{ github.event_name != 'workflow_dispatch' }}
 
         outputs:
             notebooks: ${{ steps.get_chenged_files.outputs.ntbs }}
@@ -68,24 +60,24 @@ jobs:
                 echo "Cechking output ..."
                 echo ${{ steps.get_chenged_files.outputs.ntbs }}
 
-    build_dispatch:
-        runs-on: ubuntu-latest
+    # build_dispatch:
+    #     runs-on: ubuntu-latest
 
-        if: ${{ github.event_name == 'workflow_dispatch' }}
+    #     if: ${{ github.event_name == 'workflow_dispatch' }}
 
-        outputs:
-            notebooks: ${{ steps.get_output.outputs.ntbs }}
+    #     outputs:
+    #         notebooks: ${{ steps.get_output.outputs.ntbs }}
 
-        steps:
-            - name: Get Output
-              id: get_output
-              run: |
-                echo "ntbs=\"${{ inputs.script_path }}\"" >> $GITHUB_OUTPUT
+    #     steps:
+    #         - name: Get Output
+    #           id: get_output
+    #           run: |
+    #             echo "ntbs=\"${{ inputs.script_path }}\"" >> $GITHUB_OUTPUT
 
-            - name: Check Output
-              id: check_output
-              run: |
-                echo ${{ steps.get_output.outputs.ntbs }}
+    #         - name: Check Output
+    #           id: check_output
+    #           run: |
+    #             echo ${{ steps.get_output.outputs.ntbs }}
 
     deploy:
         runs-on: ubuntu-latest
