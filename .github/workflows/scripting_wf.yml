@@ -106,12 +106,12 @@ jobs:
               run: |
                 echo "${{ env.notebooks_env }}"
                 packages=`echo "${{ env.notebooks_env }}" | while IFS= read -r n; do echo "\"$n\""; done`
-                ntbs_list=`echo "${packages}" | tr '\n' ','`
+                ntbs_list=`echo "${packages}" | tr '\n' '\",\"'`
 
                 echo "Checking ..."
                 echo "${ntbs_list}"
 
-                echo "notebooks=${ntbs_list}" >> $GITHUB_OUTPUT
+                echo "notebooks=[${ntbs_list}]" >> $GITHUB_OUTPUT
 
             - name: Check Output
               id: check_output
