@@ -93,7 +93,7 @@ jobs:
                 echo "CHECK!!!!!!!!!!!!!!!!!!"
                 echo "$( ${output[0]} )"
 
-                if [ -z output_str[0] ]; then
+                if [[ -z output_str[0] ]]; then
                     echo "change_exists=false" >> $GITHUB_OUTPUT
                     echo "EXISTS FALSE"
                 elif [ "$file_exists" == true ]; then
