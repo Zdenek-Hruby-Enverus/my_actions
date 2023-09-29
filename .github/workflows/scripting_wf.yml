@@ -3,33 +3,33 @@ name: scripting workflow
 run-name: ${{ github.actor }} is calling
 
 on:
-    pull_request:
-      branches: [ "main", "dev" ]
+  pull_request:
+    branches: [ "main", "dev" ]
 
-    workflow_dispatch:
-        inputs:
-            # script_path:
-            #     type: string
-            #     required: true
+    # workflow_dispatch:
+    #     inputs:
+    #         # script_path:
+    #         #     type: string
+    #         #     required: true
 
-            folder:
-              type: choice
-              required: true
-              options:
-                - scripts_zone
-                - scripts2_zone
+    #         folder:
+    #           type: choice
+    #           required: true
+    #           options:
+    #             - scripts_zone
+    #             - scripts2_zone
 
-            file:
-              type: choice
-              required: true
-              options:
-                - test.py
-                - test2.py
+    #         file:
+    #           type: choice
+    #           required: true
+    #           options:
+    #             - test.py
+    #             - test2.py
 
-            capitalize_name:
-              type: boolean
-              required: false
-              default: false
+    #         capitalize_name:
+    #           type: boolean
+    #           required: false
+    #           default: false
 
 jobs:
     build:
