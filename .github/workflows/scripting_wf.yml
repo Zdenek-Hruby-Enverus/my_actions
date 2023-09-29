@@ -90,7 +90,7 @@ jobs:
                   fi
                 fi
 
-                echo "CHECK!!!!!!!!!!!!!!!!!"
+                echo "CHECK!!!!!!!!!!!!!!!!!!"
                 echo "$( ${output[0]} )"
 
                 if [ -z output_str[0] ]; then
