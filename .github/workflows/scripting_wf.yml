@@ -4,7 +4,7 @@ run-name: ${{ github.actor }} is calling
 
 on:
     pull_request:
-      branches: [ "main" ]
+      branches: [ "main", "dev" ]
 
     workflow_dispatch:
         inputs:
@@ -35,7 +35,7 @@ jobs:
     build:
         runs-on: ubuntu-latest
 
-        if: ${{ ( github.event_name == 'pull_request' ) || github.event_name == 'workflow_dispatch' }}
+        if: ${{ always() && ( github.event_name == 'pull_request' ) || github.event_name == 'workflow_dispatch' }}
 
         outputs:
             notebooks: ${{ steps.get_chenged_files.outputs.ntbs }}
