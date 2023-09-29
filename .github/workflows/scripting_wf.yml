@@ -1,0 +1,118 @@
+name: scripting workflow
+
+run-name: ${{ github.actor }} is calling
+
+on:
+    pull_request:
+      branches: [ "main" ]
+
+    workflow_dispatch:
+        inputs:
+            script_path:
+                type: string
+                required: true
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        if: ${{ ( github.event_name == 'pull_request' ) || github.event_name == 'workflow_dispatch' }}
+
+        outputs:
+            notebooks: ${{ steps.get_chenged_files.outputs.ntbs }}
+            change_exists: ${{ steps.get_chenged_files.outputs.change_exists }}
+
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v3
+
+            - name: Check Diff
+              run: |
+                git fetch origin main
+                echo $(git diff origin/main)
+
+            - name: Get changed files
+              id: get_chenged_files
+              run: |
+                if [[ ${{ github.event_name }}  == 'pull_request' ]]; then
+                  modified_files=$(git diff --name-only  --diff-filter=ACMR origin/main..HEAD -- ./scripts \
+                  | grep \.py | sort -u | \
+                  while IFS= read -r n; do echo "\"$n\""; done )
+                  output_str=`echo $(echo ${modified_files[@]}) | tr ' ' ','`
+                  echo "PR!"
+                  echo "${output_str}"
+                  file_exists=true
+                elif [[ ${{ github.event_name }} == 'workflow_dispatch' ]]; then
+                  output_str=`echo "\"${{ inputs.script_path }}\""`
+                  echo "DISPATCH!"
+                  echo "${output_str}"
+                  if [ -f ${{ inputs.script_path }} ]; then
+                    file_exists=true
+                  else
+                    file_exists=false
+                  fi
+                fi
+
+                if [[ -z output_str[0] ]]; then
+                    echo "change_exists=false" >> $GITHUB_OUTPUT
+                    echo "EXISTS FALSE"
+                elif [ "$file_exists" == true ]; then
+                    echo "EXISTS TRUE"
+                    echo "change_exists=true" >> $GITHUB_OUTPUT
+                else
+                    echo "change_exists=false" >> $GITHUB_OUTPUT
+                fi
+
+                echo "ntbs=[${output_str}]" >> $GITHUB_OUTPUT
+
+                echo "${output_str[@]} added"
+
+            - name: Check Output
+              id: check_output
+              run: |
+                echo "Cechking output ..."
+                echo ${{ steps.get_chenged_files.outputs.ntbs }}
+
+    # build_dispatch:
+    #     runs-on: ubuntu-latest
+
+    #     if: ${{ github.event_name == 'workflow_dispatch' }}
+
+    #     outputs:
+    #         notebooks: ${{ steps.get_output.outputs.ntbs }}
+
+    #     steps:
+    #         - name: Get Output
+    #           id: get_output
+    #           run: |
+    #             echo "ntbs=\"${{ inputs.script_path }}\"" >> $GITHUB_OUTPUT
+
+    #         - name: Check Output
+    #           id: check_output
+    #           run: |
+    #             echo ${{ steps.get_output.outputs.ntbs }}
+
+    deploy:
+        runs-on: ubuntu-latest
+
+        needs: [ build ]
+
+        if: ${{ always() && ( fromJson( needs.build.outputs.change_exists ) ) }}
+
+        strategy:
+            matrix:
+              ntb: ${{ fromJson( needs.build.outputs.notebooks ) }}
+
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v3
+    
+            - name: Set up Python 3.9
+              uses: actions/setup-python@v2
+              with:
+                python-version: "3.9"
+        
+            - name: Run Changed Scripts
+              id: run_scripts
+              run: |
+                python ${{ matrix.ntb }}
