@@ -1,6 +1,6 @@
 name: scripting workflow
 
-run-name: ${{ github.actor }} is calling ${{ inputs.folder }}
+run-name: WF is calling ${{ inputs.folder }}/${{ inputs.file }} run by ${{ github.actor }}
 
 on:
   pull_request:
