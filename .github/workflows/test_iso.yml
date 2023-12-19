@@ -29,7 +29,7 @@ jobs:
     steps:
       - name: Setup Deployment Type
         run: |
-          if ${{ github.event.inputs.iso_name }}; then
+          if [ ! -z ${{ github.event.inputs.iso_name }} ]; then
             echo "DEPLOYMENT_TYPE=test_iso_${{ github.event.inputs.iso_name }}" >> $GITHUB_ENV
           else
             echo "DEPLOYMENT_TYPE=test" >> $GITHUB_ENV
