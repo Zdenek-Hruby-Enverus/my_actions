@@ -17,7 +17,9 @@ on:
         type: choice
         description: iso models
         required: false
+        default: ""
         options:
+          -
           - ercot
           - miso
 
