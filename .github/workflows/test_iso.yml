@@ -48,3 +48,10 @@ jobs:
       - name: run deployment.py
         run: |
           python3 ./scripts/${{ env.DEPLOYMENT_TYPE }}.py
+
+      - name: flow deployde
+        run: |
+          echo "Deployed..."
+          if [ ! -z ${{ github.event.inputs.iso_name }} ]; then
+            echo "Deployed models for ISO ${{ github.event.inputs.iso_name }}"
+          fi
