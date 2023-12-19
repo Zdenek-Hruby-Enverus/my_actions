@@ -1,22 +1,37 @@
 name: scripting workflow
 
-run-name: ${{ github.actor }} is calling
+run-name: WF is calling ${{ inputs.folder }}/${{ inputs.file }} run by ${{ github.actor }}
 
 on:
-    pull_request:
-      branches: [ "main" ]
+  pull_request:
+    branches: [ "main", "dev" ]
 
-    workflow_dispatch:
-        inputs:
-            script_path:
-                type: string
-                required: true
+  workflow_dispatch:
+      inputs:
+        folder:
+          type: choice
+          required: true
+          options:
+            - scripts_zone
+            - scripts2_zone
+
+        file:
+          type: choice
+          required: true
+          options:
+            - test.py
+            - test2.py
+
+        capitalize_name:
+          type: boolean
+          required: false
+          default: false
 
 jobs:
     build:
         runs-on: ubuntu-latest
 
-        if: ${{ ( github.event_name == 'pull_request' ) || github.event_name == 'workflow_dispatch' }}
+        if: ${{ always() && ( github.event_name == 'pull_request' ) || github.event_name == 'workflow_dispatch' }}
 
         outputs:
             notebooks: ${{ steps.get_chenged_files.outputs.ntbs }}
@@ -31,6 +46,24 @@ jobs:
                 git fetch origin main
                 echo $(git diff origin/main)
 
+            - name: Prepare Input
+              id: prepare_input
+              if: ${{ github.event_name == 'workflow_dispatch' }}
+              run: |
+                folder=${{ inputs.folder }}
+                folder_to_path="${folder/_//}"
+                file_name=${{ inputs.file }}
+                if [[ ${{ inputs.capitalize_name }} == true ]]; then
+                  file_name=${file_name^^}
+                fi
+                echo "file_path=${folder_to_path}/${file_name}" >> $GITHUB_OUTPUT
+              shell: bash
+
+            - name: Check Input
+              if: ${{ github.event_name == 'workflow_dispatch' }}
+              run: |
+                echo ${{ steps.prepare_input.outputs.file_path }}
+
             - name: Get changed files
               id: get_chenged_files
               run: |
@@ -43,17 +76,20 @@ jobs:
                   echo "${output_str}"
                   file_exists=true
                 elif [[ ${{ github.event_name }} == 'workflow_dispatch' ]]; then
-                  output_str=`echo "\"${{ inputs.script_path }}\""`
+                  output_str=`echo "\"${{ steps.prepare_input.outputs.file_path }}\""`
                   echo "DISPATCH!"
                   echo "${output_str}"
-                  if [ -f ${{ inputs.script_path }} ]; then
+                  if [ -f ${{ steps.prepare_input.outputs.file_path }} ]; then
                     file_exists=true
                   else
                     file_exists=false
                   fi
                 fi
 
-                if [[ -z output_str[0] ]]; then
+                echo "CHECK!!!!!!!!!!!!!!!!!!"
+                echo "$( ${output[0]} )"
+
+                if [[ ${output_str[0]} -eq '' ]]; then
                     echo "change_exists=false" >> $GITHUB_OUTPUT
                     echo "EXISTS FALSE"
                 elif [ "$file_exists" == true ]; then
@@ -61,6 +97,7 @@ jobs:
                     echo "change_exists=true" >> $GITHUB_OUTPUT
                 else
                     echo "change_exists=false" >> $GITHUB_OUTPUT
+                    echo "File does not exist!"
                 fi
 
                 echo "ntbs=[${output_str}]" >> $GITHUB_OUTPUT

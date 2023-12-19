@@ -1,0 +1,39 @@
+name: Test ISO
+run-name: ${{ github.actor }} is calling test iso
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_environment:
+        type: choice
+        description: prefect environment
+        required: true
+        default: dev
+        options:
+          - dev
+          - staging
+          - prod
+      iso_name:
+        type: choice
+        description: iso models
+        required: false
+        options:
+          - ercot
+          - miso
+
+jobs:
+  run-deployment:
+    runs-on: ubuntu-latest
+    environment:
+      name: pr-prefect2
+    steps:
+      - name: Setup Deployment Type
+        run: |
+          if ${{ github.event.inputs.iso_name }}; then
+            echo "DEPLOYMENT_TYPE=test_iso_${{ github.event.inputs.iso_name }}" >> $GITHUB_ENV
+          else
+            echo "DEPLOYMENT_TYPE=test" >> $GITHUB_ENV
+          fi
+      - name: run deployment.py
+        run: |
+          python3 ./scripts/${{ env.DEPLOYMENT_TYPE }}.py
