@@ -27,6 +27,14 @@ jobs:
     environment:
       name: pr-prefect2
     steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
       - name: Setup Deployment Type
         run: |
           if [ ! -z ${{ github.event.inputs.iso_name }} ]; then
@@ -34,6 +42,7 @@ jobs:
           else
             echo "DEPLOYMENT_TYPE=test" >> $GITHUB_ENV
           fi
+
       - name: run deployment.py
         run: |
           python3 ./scripts/${{ env.DEPLOYMENT_TYPE }}.py
