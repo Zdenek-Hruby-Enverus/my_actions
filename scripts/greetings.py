@@ -14,7 +14,7 @@ if __name__ == "__main__":
     try:
         a/b
     except ZeroDivisionError as e:
-        logging.error("Zero Devision Error Log")
+        logging.error("Zero Devision Error Log Test")
         raise ZeroDivisionError("skldfjslfjlsdfj alksdjlkdsjf ejrwiojr")
 
     print(f"Hello {my_args.name} from {my_args.place}.")
