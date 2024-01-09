@@ -1,4 +1,5 @@
 from argparse import ArgumentParser
+import logging
 
 
 parser = ArgumentParser()
@@ -13,6 +14,7 @@ if __name__ == "__main__":
     try:
         a/b
     except ZeroDivisionError as e:
+        logging.error("Zero Devision Error Log")
         raise ZeroDivisionError("skldfjslfjlsdfj alksdjlkdsjf ejrwiojr")
 
     print(f"Hello {my_args.name} from {my_args.place}.")
