@@ -9,8 +9,8 @@ on:
   workflow_dispatch:
     inputs:
       type: boolean
-        required: false
-        default: false
+      required: false
+      default: false
 
 env:
   MYENVVAR: env_var_${{ github.run_id}}
