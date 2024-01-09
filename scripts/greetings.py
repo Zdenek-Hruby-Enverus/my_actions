@@ -8,7 +8,7 @@ parser.add_argument("--place", type=str, required=True)
 
 my_args = parser.parse_args()
 a = 1
-b = 0
+b = 1
 
 if __name__ == "__main__":
     try:
