@@ -6,6 +6,12 @@ on:
   push:
     branches-ignore: [ "main" ]
 
+  workflow_dispatch:
+    inputs:
+      type: boolean
+        required: false
+        default: false
+
 env:
   MYENVVAR: env_var_${{ github.run_id}}
   ANOTHERVAR: var_${{ github.run_id }}
