@@ -44,9 +44,9 @@ jobs:
             echo "Initilialization ..."
 
         - name: Checkout Repo main branch
-            uses: actions/checkout@v3
-            with:
-              ref: 'main'
+          uses: actions/checkout@v3
+          with:
+            ref: 'main'
 
         - name: Checkout Repo
           uses: actions/checkout@v3
