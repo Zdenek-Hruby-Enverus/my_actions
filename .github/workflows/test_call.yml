@@ -53,7 +53,7 @@ jobs:
 
         - name: Get Diff
           run: |
-            modified_files=$(git diff --name-only --diff-filter=ACMR main HEAD \
+            modified_files=$(git diff --name-only --diff-filter=ACMR origin/main HEAD \
             | grep \.py$ | sort -u | while IFS= read -r n; do echo "\"$n\""; done)
             packages=`echo $(echo ${modified_files[@]}) | tr ' ' ','`
 
