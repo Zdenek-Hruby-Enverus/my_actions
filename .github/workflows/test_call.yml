@@ -135,8 +135,19 @@ jobs:
         matrix: ${{ fromJson(needs.prepare_strategy_matrix.outputs.test_output) }}
 
       steps:
+        - name: Checkout Repo main branch
+          uses: actions/checkout@v3
+          with:
+            - ref: 'main'
+
         - name: Checkout Repo
           uses: actions/checkout@v3
+
+        - name: Get Diff
+          run: |
+            modified_files=$(git diff --name-only --diff-filter=ACMR main HEAD \
+            | grep \.py$ | sort -u | while IFS= read -r n; do echo "\"$n\""; done)
+            packages=`echo $(echo ${modified_files[@]}) | tr ' ' ','`
 
         - name: Setup Python
           uses: actions/setup-python@v4
