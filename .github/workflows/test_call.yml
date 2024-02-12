@@ -71,16 +71,16 @@ jobs:
             echo ${{ inputs.place != 'New York' }}
 
         - name: Setup Deployment Type
-            run: |
-              if [ ! -z ${{ github.event.inputs.name }} ]; then
-                if [ ${{ github.event.inputs.forecast_type }} != 'load' ]; then
-                  echo "DEPLOYMENT_TYPE=deployment_${{ github.event.inputs.name }}_${{ github.event.inputs.forecast_type }}" >> $GITHUB_ENV
-                else
-                  echo "DEPLOYMENT_TYPE=deployment_${{ github.event.inputs.name }}" >> $GITHUB_ENV
-                fi
+          run: |
+            if [ ! -z ${{ github.event.inputs.name }} ]; then
+              if [ ${{ github.event.inputs.forecast_type }} != 'load' ]; then
+                echo "DEPLOYMENT_TYPE=deployment_${{ github.event.inputs.name }}_${{ github.event.inputs.forecast_type }}" >> $GITHUB_ENV
               else
-                echo "DEPLOYMENT_TYPE=deployment" >> $GITHUB_ENV
+                echo "DEPLOYMENT_TYPE=deployment_${{ github.event.inputs.name }}" >> $GITHUB_ENV
               fi
+            else
+              echo "DEPLOYMENT_TYPE=deployment" >> $GITHUB_ENV
+            fi
 
         - name: Deployment Setup Test
             run: |
