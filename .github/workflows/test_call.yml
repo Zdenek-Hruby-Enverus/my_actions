@@ -83,8 +83,8 @@ jobs:
             fi
 
         - name: Deployment Setup Test
-            run: |
-              echo $DEPLOYMENT_TYPE
+          run: |
+            echo $DEPLOYMENT_TYPE
 
 
     prepare_strategy_matrix:
