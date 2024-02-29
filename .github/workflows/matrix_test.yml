@@ -1,0 +1,30 @@
+name: calling a workflow
+
+run-name: ${{ github.actor }} is calling
+
+on:
+  workflow_dispatch:
+    inputs:
+      nelf_id:
+        required: true
+        type: string
+      wolf_id:
+        required: true
+        type: string
+
+jobs:
+  main_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: test_matrix
+        strategy:
+          matrix:
+            include:
+              - name: NELF
+                id: ${{ inputs.nelf_id }}
+              - name: WOLF
+                id: ${{ inputs.wolf_id }}
+        run: |
+          echo "Name: ${{ matrix.name }}"
+          echo "ID: ${{ matrix.id }}"
+          echo "Finish step"
