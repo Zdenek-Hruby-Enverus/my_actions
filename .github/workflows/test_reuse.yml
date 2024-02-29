@@ -19,6 +19,10 @@ jobs:
     if: ${{ inputs.run_wf }}
     runs-on: ubuntu-latest
     steps:
+      - name: env_test
+        run: |
+          echo "${{ env.ENVPASS }}"
+
       - name: test_matrix
         run: |
           echo "bool: ${{ inputs.run_wf }}"

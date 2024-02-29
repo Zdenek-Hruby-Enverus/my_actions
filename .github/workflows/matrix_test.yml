@@ -11,6 +11,10 @@ on:
       wolf_id:
         required: false
         type: string
+
+env:
+  ENVPASS: aksljdlsd
+
 jobs:
   main_job:
     strategy:
@@ -26,3 +30,4 @@ jobs:
     with:
       name: ${{ matrix.name }}
       id: ${{ matrix.id }}
+      ref: ${{ env.ENVPASS }}
