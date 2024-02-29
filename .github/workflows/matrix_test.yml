@@ -1,4 +1,4 @@
-name: calling a workflow
+name: testing workflow
 
 run-name: ${{ github.actor }} is calling
 
