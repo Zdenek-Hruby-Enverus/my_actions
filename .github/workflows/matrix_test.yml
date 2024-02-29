@@ -6,10 +6,10 @@ on:
   workflow_dispatch:
     inputs:
       nelf_id:
-        required: true
+        required: false
         type: string
       wolf_id:
-        required: true
+        required: false
         type: string
 jobs:
   main_job:
