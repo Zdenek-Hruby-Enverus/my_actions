@@ -21,6 +21,7 @@ jobs:
     steps:
       - name: test_matrix
         run: |
+          echo "bool: ${{ inputs.run_wf }}"
           echo "Name: ${{ inputs.name }}"
           echo "ID: ${{ inputs.id }}"
           echo "Finish step"
