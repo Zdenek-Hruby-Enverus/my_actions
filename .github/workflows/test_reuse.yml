@@ -9,10 +9,14 @@ on:
       id:
         required: true
         type: string
+      run_wf:
+        required: false
+        type: boolean
+        default: true
 
 jobs:
   main_job:
-    if: ${{ inputs.id != '' }}
+    if: ${{ inputs.id != '' }} && ${{ run_wf }}
     runs-on: ubuntu-latest
     steps:
       - name: test_matrix
