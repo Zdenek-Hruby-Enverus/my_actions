@@ -22,7 +22,7 @@ jobs:
           - name: WOLF
             id: ${{ inputs.wolf_id }}
 
-    uses: ./.github/reusables/test.yml
+    uses: ./.github/workflows/test_reuse.yml
     with:
       name: ${{ matrix.name }}
       id: ${{ matrix.id }}
