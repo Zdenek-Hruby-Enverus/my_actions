@@ -16,6 +16,12 @@ env:
   ENVPASS: aksljdlsd
 
 jobs:
+  init_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: test
+        run: |
+          echo ${{ env.ENVPASS }}
   main_job:
     strategy:
       matrix:
@@ -30,4 +36,3 @@ jobs:
     with:
       name: ${{ matrix.name }}
       id: ${{ matrix.id }}
-      ref: ${{ env.ENVPASS }}
