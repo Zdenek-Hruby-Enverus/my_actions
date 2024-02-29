@@ -11,19 +11,18 @@ on:
       wolf_id:
         required: true
         type: string
-
 jobs:
   main_job:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - name: NELF
+            id: ${{ inputs.nelf_id }}
+          - name: WOLF
+            id: ${{ inputs.wolf_id }}
     steps:
       - name: test_matrix
-        strategy:
-          matrix:
-            include:
-              - name: NELF
-                id: ${{ inputs.nelf_id }}
-              - name: WOLF
-                id: ${{ inputs.wolf_id }}
         run: |
           echo "Name: ${{ matrix.name }}"
           echo "ID: ${{ matrix.id }}"
