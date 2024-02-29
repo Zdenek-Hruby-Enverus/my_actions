@@ -16,7 +16,7 @@ on:
 
 jobs:
   main_job:
-    if: ${{ inputs.id != '' }} && ${{ run_wf }}
+    if: ${{ inputs.id != '' }} && ${{ inputs.run_wf }}
     runs-on: ubuntu-latest
     steps:
       - name: test_matrix
