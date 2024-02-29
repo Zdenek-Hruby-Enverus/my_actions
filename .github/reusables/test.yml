@@ -1,0 +1,22 @@
+name: Reusable Test
+
+on:
+  workflow_call:
+    inputs:
+      name:
+        required: true
+        type: string
+      id:
+        required: true
+        type: string
+
+jobs:
+  main_job:
+    if: ${{ inputs.id != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: test_matrix
+        run: |
+          echo "Name: ${{ inputs.name }}"
+          echo "ID: ${{ inputs.id }}"
+          echo "Finish step"

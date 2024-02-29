@@ -21,9 +21,8 @@ jobs:
             id: ${{ inputs.nelf_id }}
           - name: WOLF
             id: ${{ inputs.wolf_id }}
-    steps:
-      - name: test_matrix
-        run: |
-          echo "Name: ${{ matrix.name }}"
-          echo "ID: ${{ matrix.id }}"
-          echo "Finish step"
+
+    uses: ./.github/reusables/test.yml
+    with:
+      name: ${{ matrix.name }}
+      id: ${{ matrix.id }}
