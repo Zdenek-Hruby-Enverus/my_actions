@@ -29,12 +29,12 @@ on:
 
         nelf:
           type: string
-          required: false
+          required: true
           default: ""
 
         wolf:
           type: string
-          required: false
+          required: true
           default: ""
 
 
