@@ -51,11 +51,11 @@ jobs:
             run: |
               echo "Models to process:"
 
-              if [[ ${{ github.event.inputs.nelf }} != "" ]]; then
+              if [[ -z "${{ github.event.inputs.nelf }}" ]]; then
                 echo "Nelf is ${{ inputs.nelf }}"
               fi
 
-              if [[ ${{ github.event.inputs.wolf }} != "" ]]; then
+              if [[ -z "${{ github.event.inputs.wolf }}" ]]; then
                 echo "Wolf is ${{ inputs.wolf }}"
               fi
 
