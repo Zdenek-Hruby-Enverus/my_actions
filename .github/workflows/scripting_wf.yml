@@ -3,8 +3,8 @@ name: scripting workflow
 run-name: WF is calling ${{ inputs.folder }}/${{ inputs.file }} run by ${{ github.actor }}
 
 on:
-  pull_request:
-    branches: [ "main", "dev" ]
+#  pull_request:
+#    branches: [ "main", "dev" ]
 
   workflow_dispatch:
       inputs:
@@ -27,7 +27,33 @@ on:
           required: false
           default: false
 
+        nelf:
+          type: string
+          required: false
+          default: ""
+
+        wolf:
+          type: string
+          required: false
+          default: ""
+
+
 jobs:
+    init_job:
+        runs-on: ubuntu-latest
+        steps:
+          - name: INIT
+            run: |
+              echo "Models to process:"
+
+              if [[ ${{ inputs.nelf }} != "" ]]; then
+                echo "Nelf is ${{ inputs.nelf }}"
+              fi
+
+              if [[ ${{ inputs.wolf }} != "" ]]; then
+                echo "Wolf is ${{ inputs.wolf }}"
+              fi
+
     build:
         runs-on: ubuntu-latest
 
