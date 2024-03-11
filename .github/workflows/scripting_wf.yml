@@ -51,11 +51,11 @@ jobs:
             run: |
               echo "Models to process:"
 
-              if [ ${{ inputs.nelf }} != '' ]; then
+              if [ ${{ inputs.nelf }} != "" ]; then
                 echo "Nelf is ${{ inputs.nelf }}"
               fi
 
-              if [ ${{ inputs.wolf }} != '' ]; then
+              if [ ${{ inputs.wolf }} != "" ]; then
                 echo "Wolf is ${{ inputs.wolf }}"
               fi
 
