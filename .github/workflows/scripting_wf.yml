@@ -30,10 +30,12 @@ on:
         nelf:
           type: string
           required: false
+          default: ""
 
         wolf:
           type: string
           required: false
+          default: ""
 
 jobs:
     init_job:
