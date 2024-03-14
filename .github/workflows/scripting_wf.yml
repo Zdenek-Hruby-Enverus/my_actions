@@ -57,12 +57,13 @@ jobs:
             run: |
               echo "Models to process:"
 
+              MODEL_NAME=${{ steps.outputs.model_name }}
               if [[ -n "${{ github.event.inputs.nelf }}" ]]; then
-                echo "Nelf is ${steps.outputs.model_name/MODELTYPE/NELF}"
+                echo "Nelf is ${MODEL_NAME/MODELTYPE/NELF}"
               fi
 
               if [[ -n "${{ github.event.inputs.wolf }}" ]]; then
-                echo "Nelf is ${steps.outputs.model_name/MODELTYPE/WOLF}"
+                echo "Nelf is ${MODEL_NAME/MODELTYPE/WOLF}"
               fi
 
     build:
