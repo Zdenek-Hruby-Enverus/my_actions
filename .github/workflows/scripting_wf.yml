@@ -40,22 +40,29 @@ on:
 jobs:
     init_job:
         runs-on: ubuntu-latest
+        outputs:
+          model_name: ${{ steps.define_model.outputs.model_name
         steps:
           - name: Easy Print
             run: |
               echo "Nelf ${{ inputs.nelf }}"
               echo "Wolf ${{ inputs.wolf }}"
 
+          - name: Define Model
+            id: define_model
+            run: |
+              echo "model_name=MODELTYPE_${{ inputs.nelf }}_MODELTYPE" >> GITHUB_OUTPUT
+
           - name: INIT
             run: |
               echo "Models to process:"
 
               if [[ -n "${{ github.event.inputs.nelf }}" ]]; then
-                echo "Nelf is ${{ inputs.nelf }}"
+                echo "Nelf is ${{ steps.outputs.model_name/MODELTYPE/NELF }}"
               fi
 
               if [[ -n "${{ github.event.inputs.wolf }}" ]]; then
-                echo "Wolf is ${{ inputs.wolf }}"
+                echo "Nelf is ${{ steps.outputs.model_name/MODELTYPE/WOLF }}"
               fi
 
     build:
