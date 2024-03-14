@@ -58,6 +58,8 @@ jobs:
               echo "Models to process:"
 
               MODEL_NAME=${{ steps.define_model.outputs.model_name }}
+              echo "$MODEL_NAME"
+
               if [[ -n "${{ github.event.inputs.nelf }}" ]]; then
                 echo "Nelf is ${MODEL_NAME/MODELTYPE/NELF}"
               fi
