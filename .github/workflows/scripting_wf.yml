@@ -51,7 +51,7 @@ jobs:
           - name: Define Model
             id: define_model
             run: |
-              echo "model_name=MODELTYPE_${{ inputs.nelf }}_MODELTYPE" >> GITHUB_OUTPUT
+              echo "model_name=MODELTYPE_${{ inputs.nelf }}_MODELTYPE" >> $GITHUB_OUTPUT
 
           - name: INIT
             run: |
