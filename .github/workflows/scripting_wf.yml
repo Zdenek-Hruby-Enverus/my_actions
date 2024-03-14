@@ -41,7 +41,7 @@ jobs:
     init_job:
         runs-on: ubuntu-latest
         outputs:
-          model_name: ${{ steps.define_model.outputs.model_name
+          model_name: ${{ steps.define_model.outputs.model_name }}
         steps:
           - name: Easy Print
             run: |
