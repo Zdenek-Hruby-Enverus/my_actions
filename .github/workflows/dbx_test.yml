@@ -37,6 +37,10 @@ jobs:
               databricks-host: "https://enverus-pr-ue1-dev.cloud.databricks.com"
               databricks-token: "dapi00bbf0783c5b0fb6f8a2faf4ba06ff87"
 
+          - name: Print ensemble path
+            run: |
+              echo "${{ steps.upload_ensemble.outputs.dbfs-file-path }}"
+
           - name: Sleep
             run: |
               sleep 300s
@@ -54,5 +58,20 @@ jobs:
                   {
                     "key": "ensemble_file_path",
                     "value": "${{ steps.upload_ensemble.outputs.dbfs-file-path }}"
+                  }
+                ]
+              new-cluster-json: >
+                {
+                  "num_workers": 1,
+                  "spark_version": "13.3.x-scala2.12",
+                  "node_type_id": "Standard_D3_v2"
+                }
+                # Grant all users view permission on the notebook results, so that they can
+                # see the result of our CI notebook
+              access-control-list-json: >
+                [
+                  {
+                    "group_name": "PR_UNRESTRICTED_POWER_USERS_DEV",
+                    "permission_level": "CAN_VIEW"
                   }
                 ]
