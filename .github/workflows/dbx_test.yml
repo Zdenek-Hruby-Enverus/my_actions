@@ -21,7 +21,7 @@ jobs:
             uses: databricks/upload-dbfs-temp@v0
             id: upload_ensemble
             with:
-              local-path: "/Users/zdenek.hruby/Enverus/projects/my_actions/files/ENSEMBLE.json"
+              local-path: "./my_actions/files/ENSEMBLE.json"
               databricks-host: "https://enverus-pr-ue1-dev.cloud.databricks.com"
               databricks-token: "dapi00bbf0783c5b0fb6f8a2faf4ba06ff87"
 
