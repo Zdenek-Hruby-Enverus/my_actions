@@ -17,6 +17,10 @@ jobs:
     my_job:
         runs-on: ubuntu-latest
         steps:
+          - name: Run ls
+            run: |
+              ls -tr
+
           - name: Upload ENSEMBLE File to DBX
             uses: databricks/upload-dbfs-temp@v0
             id: upload_ensemble
