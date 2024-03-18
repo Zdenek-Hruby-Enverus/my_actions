@@ -37,6 +37,11 @@ jobs:
               databricks-host: "https://enverus-pr-ue1-dev.cloud.databricks.com"
               databricks-token: "dapi00bbf0783c5b0fb6f8a2faf4ba06ff87"
 
+          - name: Sleep
+            run: |
+              sleep 300s
+            shell: bash
+
           - name: Run Notebook
             uses: databricks/run-notebook@v0
             with:
