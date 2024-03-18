@@ -52,7 +52,6 @@ jobs:
               local-notebook-path: "./templates/ntb_test.py"
               databricks-host: "https://enverus-pr-ue1-dev.cloud.databricks.com"
               databricks-token: "dapi00bbf0783c5b0fb6f8a2faf4ba06ff87"
-              existing-cluster-id: "0123-123947-f9w7986"
               notebook-params-json: >
                 [
                   {
