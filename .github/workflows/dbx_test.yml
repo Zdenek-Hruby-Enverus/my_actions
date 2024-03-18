@@ -19,7 +19,7 @@ jobs:
         steps:
           - name: Run ls
             run: |
-              ls -tr
+              echo $(ls -tr)
 
           - name: Upload ENSEMBLE File to DBX
             uses: databricks/upload-dbfs-temp@v0
