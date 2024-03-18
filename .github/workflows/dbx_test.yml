@@ -65,8 +65,6 @@ jobs:
                   "spark_version": "13.3.x-scala2.12",
                   "node_type_id": "Standard_D3_v2"
                 }
-                # Grant all users view permission on the notebook results, so that they can
-                # see the result of our CI notebook
               access-control-list-json: >
                 [
                   {
