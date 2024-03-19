@@ -37,6 +37,14 @@ jobs:
         with:
           python-version: 3.9
 
+      - name: Get Path
+        run: |
+          python3 ./scripts/transformer_script.py --iso ERCOT --type LOAD --point TOTAL
+
+      - name: Test Envvar
+        run: |
+          echo "${{ env.ENSEMBLE_FILE_PATH }}"
+
       - name: Setup Deployment Type
         run: |
           if [ ! -z ${{ github.event.inputs.iso_name }} ]; then
