@@ -1,0 +1,65 @@
+name: Test ISO
+run-name: ${{ github.actor }} is calling test iso
+
+on:
+  workflow_dispatch:
+    inputs:
+      deploy_environment:
+        type: choice
+        description: prefect environment
+        required: true
+        default: dev
+        options:
+          - dev
+          - staging
+          - prod
+      iso_name:
+        type: choice
+        description: iso models
+        required: false
+        default: ""
+        options:
+          -
+          - ercot
+          - miso
+
+jobs:
+  run-deployment:
+    runs-on: ubuntu-latest
+    environment:
+      name: pr-prefect2
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - name: Get Path
+        run: |
+          python3 ./scripts/transformer_script.py --iso ERCOT --type LOAD --point TOTAL
+
+      - name: Test Envvar
+        run: |
+          echo "${{ env.ENSEMBLE_FILE_PATH }}"
+
+      - name: Setup Deployment Type
+        run: |
+          if [ ! -z ${{ github.event.inputs.iso_name }} ]; then
+            echo "DEPLOYMENT_TYPE=test_iso_${{ github.event.inputs.iso_name }}" >> $GITHUB_ENV
+          else
+            echo "DEPLOYMENT_TYPE=test" >> $GITHUB_ENV
+          fi
+
+      - name: run deployment.py
+        run: |
+          python3 ./scripts/${{ env.DEPLOYMENT_TYPE }}.py
+
+      - name: flow deployde
+        run: |
+          echo "Deployed..."
+          if [ ! -z ${{ github.event.inputs.iso_name }} ]; then
+            echo "Deployed models for ISO ${{ github.event.inputs.iso_name }}"
+          fi
