@@ -35,7 +35,7 @@ jobs:
             with:
               local-path: "./files/ENSEMBLE.json"
               databricks-host: "https://enverus-pr-ue1-dev.cloud.databricks.com"
-              databricks-token: "dapi00bbf0783c5b0fb6f8a2faf4ba06ff87"
+              databricks-token: "dapi7ba14da8afed5eb0d962efec184b7972"
 
           - name: Print ensemble path
             run: |
@@ -51,7 +51,7 @@ jobs:
             with:
               local-notebook-path: "./templates/ntb_test.py"
               databricks-host: "https://enverus-pr-ue1-dev.cloud.databricks.com"
-              databricks-token: "dapi00bbf0783c5b0fb6f8a2faf4ba06ff87"
+              databricks-token: "dapi7ba14da8afed5eb0d962efec184b7972"
               notebook-params-json: >
                 [
                   {
