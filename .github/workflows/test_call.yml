@@ -21,6 +21,15 @@ on:
                   - "Old York"
                   - "ZOO York"
                   - "All"
+            forecast_type:
+              required: false
+              description: type of the forecast - load/solar/wind
+              type: choice
+              default: "load"
+              options:
+                - load
+                - solar
+                - wind
 
 jobs:
     init_j:
@@ -43,9 +52,39 @@ jobs:
           run: |
             echo "Initilialization ..."
 
+        - name: Checkout Repo main branch
+          uses: actions/checkout@v3
+          with:
+            ref: 'main'
+
+        - name: Checkout Repo
+          uses: actions/checkout@v3
+
+        - name: Get Diff
+          run: |
+            modified_files=$(git diff --name-only --diff-filter=ACMR origin/main HEAD \
+            | grep \.py$ | sort -u | while IFS= read -r n; do echo "\"$n\""; done)
+            packages=`echo $(echo ${modified_files[@]}) | tr ' ' ','`
+
         - name: test
           run: |
             echo ${{ inputs.place != 'New York' }}
+
+        - name: Setup Deployment Type
+          run: |
+            if [ ! -z ${{ github.event.inputs.name }} ]; then
+              if [ ${{ github.event.inputs.forecast_type }} != 'load' ]; then
+                echo "DEPLOYMENT_TYPE=deployment_${{ github.event.inputs.name }}_${{ github.event.inputs.forecast_type }}" >> $GITHUB_ENV
+              else
+                echo "DEPLOYMENT_TYPE=deployment_${{ github.event.inputs.name }}" >> $GITHUB_ENV
+              fi
+            else
+              echo "DEPLOYMENT_TYPE=deployment" >> $GITHUB_ENV
+            fi
+
+        - name: Deployment Setup Test
+          run: |
+            echo $DEPLOYMENT_TYPE
 
 
     prepare_strategy_matrix:
@@ -135,8 +174,19 @@ jobs:
         matrix: ${{ fromJson(needs.prepare_strategy_matrix.outputs.test_output) }}
 
       steps:
+        - name: Checkout Repo main branch
+          uses: actions/checkout@v3
+          with:
+            ref: 'main'
+
         - name: Checkout Repo
           uses: actions/checkout@v3
+
+        - name: Get Diff
+          run: |
+            modified_files=$(git diff --name-only --diff-filter=ACMR main HEAD \
+            | grep \.py$ | sort -u | while IFS= read -r n; do echo "\"$n\""; done)
+            packages=`echo $(echo ${modified_files[@]}) | tr ' ' ','`
 
         - name: Setup Python
           uses: actions/setup-python@v4
