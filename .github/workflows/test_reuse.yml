@@ -11,12 +11,12 @@ on:
         type: string
       run_wf:
         required: false
-        type: boolean
-        default: true
+        type: string
+        default: 'true'
 
 jobs:
   main_job:
-    if: ${{ inputs.run_wf == true }}
+    if: ${{ inputs.run_wf == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: env_test
