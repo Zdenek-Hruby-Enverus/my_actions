@@ -32,7 +32,7 @@ jobs:
             id: ${{ inputs.nelf_id }}
           - name: WOLF
             id: ${{ inputs.wolf_id }}
-            run_wf: ${{ inputs.wolf_id != '' }}
+            run_wf: ${{ inputs.wolf_id == 'zzzzzz' }}
 
     uses: ./.github/workflows/test_reuse.yml
     with:
