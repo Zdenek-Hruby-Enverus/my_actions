@@ -30,11 +30,13 @@ jobs:
         include:
           - name: NELF
             id: ${{ inputs.nelf_id }}
+            run_wf: ${{ inputs.nelf_id != '' }}
           - name: WOLF
             id: ${{ inputs.wolf_id }}
-            run_wf: 'false'
+            run_wf: ${{ inputs.wolf_id != '' }}
 
     uses: ./.github/workflows/test_reuse.yml
     with:
       name: ${{ matrix.name }}
       id: ${{ matrix.id }}
+      run_wf: ${{ matrix.run_wf }}
