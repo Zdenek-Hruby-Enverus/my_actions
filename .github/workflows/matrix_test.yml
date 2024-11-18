@@ -26,6 +26,8 @@ jobs:
           echo ${{ env.ENVPASS }}
   main_job:
     needs: [init_job]
+    outputs:
+      job_result: ${{ steps.outcome_exit.outputs.job_result }}
     strategy:
       matrix:
         include:
@@ -49,4 +51,4 @@ jobs:
     steps:
       - name: test
         run: |
-          echo "main job result: ${{ needs.main_job.outputs.job_result }}"
+          echo "main job result: ${{ toJson(needs.main_job.outputs.job_result) }}"
