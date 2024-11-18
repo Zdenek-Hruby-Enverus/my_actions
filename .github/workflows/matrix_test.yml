@@ -49,4 +49,4 @@ jobs:
     steps:
       - name: test
         run: |
-          echo "main job result: ${{ toJson(needs.main_job.outputs.outcomes) }}"
+          echo "main job result: ${{ needs.main_job.outputs.success }}"
