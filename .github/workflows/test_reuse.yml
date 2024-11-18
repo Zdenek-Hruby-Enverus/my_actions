@@ -19,7 +19,7 @@ jobs:
     if: ${{ inputs.run_wf == true }}
     runs-on: ubuntu-latest
     outputs:
-      job_result ${{ steps.outcome_exit.outputs.job_result }}
+      job_result: ${{ steps.outcome_exit.outputs.job_result }}
     steps:
       - name: env_test
         run: |
