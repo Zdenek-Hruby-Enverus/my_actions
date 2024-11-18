@@ -36,4 +36,3 @@ jobs:
     with:
       name: ${{ matrix.name }}
       id: ${{ matrix.id }}
-      ref:
