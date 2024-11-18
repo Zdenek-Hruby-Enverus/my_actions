@@ -25,6 +25,7 @@ jobs:
         run: |
           echo ${{ env.ENVPASS }}
   main_job:
+    needs: [init_job]
     strategy:
       matrix:
         include:
@@ -40,3 +41,12 @@ jobs:
       name: ${{ matrix.name }}
       id: ${{ matrix.id }}
       run_wf: ${{ matrix.run_wf }}
+
+  conditional_job:
+    needs: [main_job]
+    if: needs.main_job.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: test
+        run: |
+          echo "fine"
