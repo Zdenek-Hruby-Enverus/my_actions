@@ -18,6 +18,7 @@ jobs:
   main_job:
     if: ${{ inputs.run_wf == true }}
     runs-on: ubuntu-latest
+    outcomes: steps.outcome_exit.outputs.job_result
     steps:
       - name: env_test
         run: |
@@ -29,3 +30,8 @@ jobs:
           echo "Name: ${{ inputs.name }}"
           echo "ID: ${{ inputs.id }}"
           echo "Finish step"
+
+      - name: outcome exit
+        id: outcome_exit
+        run: |
+          echo "job_result=TRUE" >> $GITHUB_OUTPUT
