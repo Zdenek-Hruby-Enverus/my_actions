@@ -8,9 +8,11 @@ on:
       nelf_id:
         required: false
         type: string
+        default: ''
       wolf_id:
         required: false
         type: string
+        default: ''
 
 env:
   ENVPASS: aksljdlsd
