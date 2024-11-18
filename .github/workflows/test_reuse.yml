@@ -16,7 +16,7 @@ on:
 
 jobs:
   main_job:
-    if: ${{ inputs.run_wf }}
+    if: ${{ inputs.run_wf == true }}
     runs-on: ubuntu-latest
     steps:
       - name: env_test
