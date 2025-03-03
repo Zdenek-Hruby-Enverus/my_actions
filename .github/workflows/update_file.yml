@@ -61,7 +61,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh pr create --base main --body $FEATURE_BRANCH
+          gh pr create --title "gha update" --base main --body $FEATURE_BRANCH
 
       # Step for OTHER BRANCHES (Uses stash & direct commit)
       - name: Commit and Push Directly (if NOT on main)
