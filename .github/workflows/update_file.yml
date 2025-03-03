@@ -1,0 +1,81 @@
+name: Upload File
+
+on:
+  workflow_call:
+
+jobs:
+  upload_file:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+
+      - name: Get current branch
+        run: echo "CURRENT_BRANCH=${{ github.ref_name }}" >> $GITHUB_ENV
+
+      # Step 1: Create a feature branch if running from test branch
+      - name: Create a feature branch
+        if: env.CURRENT_BRANCH == 'main'
+        run: |
+          FEATURE_BRANCH="feature/update-json-${{ github.run_id }}"
+          git checkout -b "$FEATURE_BRANCH"
+          echo "FEATURE_BRANCH=$FEATURE_BRANCH" >> $GITHUB_ENV
+
+      - name: Create the Report
+        run: |
+          python3 scripts/update_file.py
+      # Step 3: Commit and push changes
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions@github.com"
+
+          if git diff --quiet && git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git status
+          git add .
+          git status
+          git commit -m "Update ENSEMBLE.json file"
+          git push origin "$FEATURE_BRANCH"
+
+      # Step 4: Create Pull Request
+      - name: Create Pull Request
+        if: env.CURRENT_BRANCH == 'main'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ env.FEATURE_BRANCH }}
+          title: "Update ENSEMBLE.json file"
+          body: "This PR updates the ENSEMBLE.json file with new data."
+          base: feat/ZH-add-git-file-update-TEST
+          auto-merge: false
+
+      # Step for OTHER BRANCHES (Uses stash & direct commit)
+      - name: Commit and Push Directly (if NOT on main)
+        if: env.CURRENT_BRANCH != 'feat/ZH-add-git-file-update-TEST'
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions@github.com"
+
+          # Check if there are any changes
+          if git diff --quiet && git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          # Use stash to avoid conflicts
+          git stash push -m "temp-stash-before-rebase"
+          git pull origin --rebase
+          git stash pop || echo "No stash to apply"
+
+          git add .
+          git commit -m "Update ENSEMBLE.json file"
+          git push
