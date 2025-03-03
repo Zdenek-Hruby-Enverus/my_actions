@@ -1,7 +1,7 @@
 name: Upload File
 
 on:
-  workflow_call:
+  workflow_dispatch:
 
 jobs:
   upload_file:
