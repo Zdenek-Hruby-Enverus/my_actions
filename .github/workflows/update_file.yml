@@ -33,9 +33,6 @@ jobs:
       # Step 3: Commit and push changes
       - name: Commit and Push Changes
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions@github.com"
-
           git status
           git add .
           git status
