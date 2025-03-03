@@ -9,6 +9,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Ensure full repo history is available
 
       - name: Set up Python 3.9
         uses: actions/setup-python@v5
@@ -16,9 +18,12 @@ jobs:
           python-version: "3.9"
 
       - name: Get current branch
-        run: echo "CURRENT_BRANCH=${{ github.ref_name }}" >> $GITHUB_ENV
+        run: echo "CURRENT_BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
 
-      # Step 1: Create a feature branch if running from test branch
+      - name: Debug Current Branch
+        run: echo "Current branch: $CURRENT_BRANCH"
+
+      # Step 1: Create a feature branch if running from main branch
       - name: Create a feature branch
         if: env.CURRENT_BRANCH == 'main'
         run: |
@@ -27,11 +32,11 @@ jobs:
           echo "FEATURE_BRANCH=$FEATURE_BRANCH" >> $GITHUB_ENV
 
       - name: Create the Report
-        run: |
-          python3 scripts/update_json.py
+        run: python3 scripts/update_json.py
 
       # Step 3: Commit and push changes
       - name: Commit and Push Changes
+        if: env.CURRENT_BRANCH == 'main'
         run: |
           git config --global user.name "Zdenek-Hruby-Enverus"
           git config --global user.email "zdenek.hruby@enverus.com"
@@ -39,8 +44,8 @@ jobs:
           git status
           git add .
           git status
-          git commit -m "Update ENSEMBLE.json file"
-          git push origin "$FEATURE_BRANCH"
+          git commit -m "Update ENSEMBLE.json file" || echo "No changes to commit."
+          git push origin "$FEATURE_BRANCH" || (echo "Push failed!" && exit 1)
 
       # Step 4: Create Pull Request
       - name: Create Pull Request
@@ -55,7 +60,7 @@ jobs:
 
       # Step for OTHER BRANCHES (Uses stash & direct commit)
       - name: Commit and Push Directly (if NOT on main)
-        if: env.CURRENT_BRANCH != 'feat/ZH-add-git-file-update-TEST'
+        if: env.CURRENT_BRANCH != 'main'
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions@github.com"
@@ -73,4 +78,4 @@ jobs:
 
           git add .
           git commit -m "Update ENSEMBLE.json file"
-          git push
+          git push origin "$CURRENT_BRANCH" || (echo "Push failed!" && exit 1)
