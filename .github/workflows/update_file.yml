@@ -28,7 +28,7 @@ jobs:
 
       - name: Create the Report
         run: |
-          python3 scripts/update_file.py
+          python3 scripts/update_json.py
       # Step 3: Commit and push changes
       - name: Commit and Push Changes
         run: |
