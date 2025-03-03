@@ -48,9 +48,6 @@ jobs:
           git status
           git commit -m "Update ENSEMBLE.json file" || echo "No changes to commit."
 
-          # Fetch latest changes to avoid push conflicts
-          git pull origin "$FEATURE_BRANCH" --rebase
-
           git push origin "$FEATURE_BRANCH" || (echo "Push failed!" && exit 1)
 
           # Double-check if the commit exists after push
