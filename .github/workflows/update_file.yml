@@ -55,8 +55,7 @@ jobs:
           branch: ${{ env.FEATURE_BRANCH }}
           title: "Update ENSEMBLE.json file"
           body: "This PR updates the ENSEMBLE.json file with new data."
-          base: feat/ZH-add-git-file-update-TEST
-          auto-merge: false
+          base: main
 
       # Step for OTHER BRANCHES (Uses stash & direct commit)
       - name: Commit and Push Directly (if NOT on main)
