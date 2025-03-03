@@ -52,7 +52,7 @@ jobs:
 
           git push --force "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git" "$FEATURE_BRANCH" || (echo "Push failed!" && exit 1)
 
-          gh pr create --title "gha update" --base main --body ${{ env.FEATURE_BRANCH }} --head ${{ github.run_id }}-${{ github.run_attempt }}
+          gh pr create --title "gha update" --base main --head ${{ env.FEATURE_BRANCH }}
 
       # Step for OTHER BRANCHES (Uses stash & direct commit)
       - name: Commit and Push Directly (if NOT on main)
