@@ -48,7 +48,7 @@ jobs:
           git status
           git commit -m "Update ENSEMBLE.json file" || echo "No changes to commit."
 
-          git push origin "$FEATURE_BRANCH" || (echo "Push failed!" && exit 1)
+          git push --force origin "$FEATURE_BRANCH" || (echo "Push failed!" && exit 1)
 
           # Double-check if the commit exists after push
           git log -n 5
