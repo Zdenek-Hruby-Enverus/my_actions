@@ -61,6 +61,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          git fetch "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git"
           gh pr create --title "gha update" --base main --body ${{ env.FEATURE_BRANCH }}
 
       # Step for OTHER BRANCHES (Uses stash & direct commit)
