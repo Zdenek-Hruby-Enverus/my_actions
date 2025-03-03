@@ -18,10 +18,12 @@ jobs:
           python-version: "3.9"
 
       - name: Get current branch
-        run: echo "CURRENT_BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+        run: |
+          echo "CURRENT_BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
 
       - name: Debug Current Branch
-        run: echo "Current branch: $CURRENT_BRANCH"
+        run: |
+          echo "Current branch: $CURRENT_BRANCH"
 
       # Step 1: Create a feature branch if running from main branch
       - name: Create a feature branch
