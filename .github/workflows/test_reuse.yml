@@ -1,0 +1,38 @@
+name: Reusable Test
+
+on:
+  workflow_call:
+    inputs:
+      name:
+        required: true
+        type: string
+      id:
+        required: true
+        type: string
+      run_wf:
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  main_job:
+    if: ${{ inputs.run_wf == true }}
+    runs-on: ubuntu-latest
+    outputs:
+      job_result: ${{ steps.outcome_exit.outputs.job_result }}
+    steps:
+      - name: env_test
+        run: |
+          echo "${{ env.ENVPASS }}"
+
+      - name: test_matrix
+        run: |
+          echo "bool: ${{ inputs.run_wf }}"
+          echo "Name: ${{ inputs.name }}"
+          echo "ID: ${{ inputs.id }}"
+          echo "Finish step"
+
+      - name: outcome exit
+        id: outcome_exit
+        run: |
+          echo "job_result=TRUE" >> $GITHUB_OUTPUT
