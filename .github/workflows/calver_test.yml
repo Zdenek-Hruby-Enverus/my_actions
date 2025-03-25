@@ -1,0 +1,23 @@
+name: calver_test
+
+run-name: CALVER-TEST
+
+on:
+  workflow_dispatch:
+
+jobs:
+  main-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Calver Release
+        uses: StephaneBour/actions-calver@master
+        id: calver
+        with:
+          date_format: "%Y-%m-%d"
+
+      - name: Check version
+        id: version-check
+        run: |
+          echo ${ steps.calver.outputs.release }
