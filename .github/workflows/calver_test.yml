@@ -22,4 +22,4 @@ jobs:
       - name: Check version
         id: version-check
         run: |
-          echo ${ steps.calver.outputs.release }
+          echo ${{ steps.calver.outputs.release }}
