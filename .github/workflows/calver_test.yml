@@ -16,6 +16,8 @@ jobs:
         id: calver
         with:
           date_format: "%Y-%m-%d"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check version
         id: version-check
