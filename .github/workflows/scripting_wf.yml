@@ -1,37 +1,73 @@
 name: scripting workflow
 
-run-name: ${{ github.actor }} is calling
+run-name: WF is calling ${{ inputs.folder }}/${{ inputs.file }} run by ${{ github.actor }}
 
 on:
-  pull_request:
-    branches: [ "main", "dev" ]
+#  pull_request:
+#    branches: [ "main", "dev" ]
 
-    # workflow_dispatch:
-    #     inputs:
-    #         # script_path:
-    #         #     type: string
-    #         #     required: true
+  workflow_dispatch:
+      inputs:
+        folder:
+          type: choice
+          required: true
+          options:
+            - scripts_zone
+            - scripts2_zone
 
-    #         folder:
-    #           type: choice
-    #           required: true
-    #           options:
-    #             - scripts_zone
-    #             - scripts2_zone
+        file:
+          type: choice
+          required: true
+          options:
+            - test.py
+            - test2.py
 
-    #         file:
-    #           type: choice
-    #           required: true
-    #           options:
-    #             - test.py
-    #             - test2.py
+        capitalize_name:
+          type: boolean
+          required: false
+          default: false
 
-    #         capitalize_name:
-    #           type: boolean
-    #           required: false
-    #           default: false
+        nelf:
+          type: string
+          required: false
+          default: ""
+
+        wolf:
+          type: string
+          required: false
+          default: ""
 
 jobs:
+    init_job:
+        runs-on: ubuntu-latest
+        outputs:
+          model_name: ${{ steps.define_model.outputs.model_name }}
+        steps:
+          - name: Easy Print
+            run: |
+              echo "Nelf ${{ inputs.nelf }}"
+              echo "Wolf ${{ inputs.wolf }}"
+
+          - name: Define Model
+            id: define_model
+            run: |
+              echo "model_name=MODELTYPE_${{ inputs.nelf }}_MODELTYPE" >> $GITHUB_OUTPUT
+
+          - name: INIT
+            run: |
+              echo "Models to process:"
+
+              MODEL_NAME=${{ steps.define_model.outputs.model_name }}
+              echo "$MODEL_NAME"
+
+              if [[ -n "${{ github.event.inputs.nelf }}" ]]; then
+                echo "Nelf is ${MODEL_NAME/MODELTYPE/NELF}"
+              fi
+
+              if [[ -n "${{ github.event.inputs.wolf }}" ]]; then
+                echo "Nelf is ${MODEL_NAME/MODELTYPE/WOLF}"
+              fi
+
     build:
         runs-on: ubuntu-latest
 
@@ -93,7 +129,7 @@ jobs:
                 echo "CHECK!!!!!!!!!!!!!!!!!!"
                 echo "$( ${output[0]} )"
 
-                if [ -z output_str[0] ]; then
+                if [[ ${output_str[0]} -eq '' ]]; then
                     echo "change_exists=false" >> $GITHUB_OUTPUT
                     echo "EXISTS FALSE"
                 elif [ "$file_exists" == true ]; then

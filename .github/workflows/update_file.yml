@@ -1,0 +1,77 @@
+name: Upload File
+
+on:
+  workflow_dispatch:
+
+jobs:
+  upload_file:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Ensure full repo history is available
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+
+      - name: Get current branch
+        run: |
+          echo "CURRENT_BRANCH=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+
+      - name: Debug Current Branch
+        run: |
+          echo "Current branch: $CURRENT_BRANCH"
+
+      # Step 1: Create a feature branch if running from main branch
+      - name: Create a feature branch
+        if: env.CURRENT_BRANCH == 'main'
+        run: |
+          FEATURE_BRANCH="feature/update-json-${{ github.run_id }}"
+          git checkout -b "$FEATURE_BRANCH"
+          echo "FEATURE_BRANCH=$FEATURE_BRANCH" >> $GITHUB_ENV
+
+      - name: Create the Report
+        run: python3 scripts/update_json.py
+
+      # Step 3: Commit and push changes
+      - name: Commit and Push Changes
+        if: env.CURRENT_BRANCH == 'main'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.name "Zdenek-Hruby-Enverus"
+          git config --global user.email "zdenek.hruby@enverus.com"
+
+          git status
+          git add -A
+          git status
+          git commit -m "Update ENSEMBLE.json file" || echo "No changes to commit."
+
+          git push --force "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git" "$FEATURE_BRANCH" || (echo "Push failed!" && exit 1)
+
+          gh pr create --title "gha json file update - $(date +%F_%T)" --base main --body ${{ env.FEATURE_BRANCH }} --head ${{ env.FEATURE_BRANCH }}
+
+      # Step for OTHER BRANCHES (Uses stash & direct commit)
+      - name: Commit and Push Directly (if NOT on main)
+        if: env.CURRENT_BRANCH != 'main'
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions@github.com"
+
+          # Check if there are any changes
+          if git diff --quiet && git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          # Use stash to avoid conflicts
+          git stash push -m "temp-stash-before-rebase"
+          git pull origin --rebase
+          git stash pop || echo "No stash to apply"
+
+          git add -A
+          git commit -m "Update ENSEMBLE.json file"
+          git push origin "$CURRENT_BRANCH" || (echo "Push failed!" && exit 1)
