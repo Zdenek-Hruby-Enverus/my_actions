@@ -1,0 +1,54 @@
+name: testing workflow
+
+run-name: ${{ github.actor }} is calling
+
+on:
+  workflow_dispatch:
+    inputs:
+      nelf_id:
+        required: false
+        type: string
+        default: ''
+      wolf_id:
+        required: false
+        type: string
+        default: ''
+
+env:
+  ENVPASS: aksljdlsd
+
+jobs:
+  init_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: test
+        run: |
+          echo ${{ env.ENVPASS }}
+  main_job:
+    needs: [init_job]
+    outputs:
+      job_result: ${{ steps.outcome_exit.outputs.job_result }}
+    strategy:
+      matrix:
+        include:
+          - name: NELF
+            id: ${{ inputs.nelf_id }}
+            run_wf: ${{ inputs.nelf_id != '' }}
+          - name: WOLF
+            id: ${{ inputs.wolf_id }}
+            run_wf: ${{ inputs.wolf_id != '' }}
+
+    uses: ./.github/workflows/test_reuse.yml
+    with:
+      name: ${{ matrix.name }}
+      id: ${{ matrix.id }}
+      run_wf: ${{ matrix.run_wf }}
+
+  conditional_job:
+    needs: [main_job]
+    if: needs.main_job.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: test
+        run: |
+          echo "main job result: ${{ toJson(needs.main_job.outputs.job_result) }}"

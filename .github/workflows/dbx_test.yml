@@ -1,0 +1,74 @@
+name: dbx_workflow
+
+run-name: DBX-TEST
+
+on:
+#  pull_request:
+#    branches: [ "main", "dev" ]
+
+  workflow_dispatch:
+      inputs:
+        test:
+          type: string
+          required: false
+          default: ""
+
+jobs:
+    my_job:
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout repo
+            uses: actions/checkout@v4
+
+          - name: Set up Python 3.9
+            uses: actions/setup-python@v5
+            with:
+              python-version: "3.9"
+
+          - name: Run ls
+            run: |
+              echo $(ls -tr)
+
+          - name: Upload ENSEMBLE File to DBX
+            uses: databricks/upload-dbfs-temp@v0
+            id: upload_ensemble
+            with:
+              local-path: "./files/ENSEMBLE.json"
+              databricks-host: "https://enverus-pr-ue1-dev.cloud.databricks.com"
+              databricks-token: "dapi7ba14da8afed5eb0d962efec184b7972"
+
+          - name: Print ensemble path
+            run: |
+              echo "${{ steps.upload_ensemble.outputs.dbfs-file-path }}"
+
+          - name: Sleep
+            run: |
+              sleep 300s
+            shell: bash
+
+          - name: Run Notebook
+            uses: databricks/run-notebook@v0
+            with:
+              local-notebook-path: "./templates/ntb_test.py"
+              databricks-host: "https://enverus-pr-ue1-dev.cloud.databricks.com"
+              databricks-token: "dapi7ba14da8afed5eb0d962efec184b7972"
+              notebook-params-json: >
+                [
+                  {
+                    "key": "ensemble_file_path",
+                    "value": "${{ steps.upload_ensemble.outputs.dbfs-file-path }}"
+                  }
+                ]
+              new-cluster-json: >
+                {
+                  "num_workers": 1,
+                  "spark_version": "13.3.x-scala2.12",
+                  "node_type_id": "Standard_D3_v2"
+                }
+              access-control-list-json: >
+                [
+                  {
+                    "group_name": "PR_UNRESTRICTED_POWER_USERS_DEV",
+                    "permission_level": "CAN_VIEW"
+                  }
+                ]
