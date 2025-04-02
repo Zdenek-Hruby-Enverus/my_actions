@@ -9,8 +9,8 @@ jobs:
   init_job:
     runs-on: ubuntu-latest
     steps:
-      run: |
-        echo "Starting a test"
+      - run: |
+          echo "Starting a test"
 
   first_job:
     runs-on: ubuntu-latest
